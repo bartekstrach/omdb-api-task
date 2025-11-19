@@ -1,4 +1,5 @@
-import { StrictMode } from 'react';
+// Disabling StrictMode to avoid calling fetch twice
+// import { StrictMode } from 'react';
 
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
@@ -7,9 +8,9 @@ import './index.css';
 import AppRoutes from './pages/routes.tsx';
 
 createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <BrowserRouter>
-            <AppRoutes />
-        </BrowserRouter>
-    </StrictMode>
+    // <StrictMode>
+    <BrowserRouter>
+        <AppRoutes />
+    </BrowserRouter>
+    // </StrictMode>
 );
