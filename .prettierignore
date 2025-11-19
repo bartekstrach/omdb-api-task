@@ -1,0 +1,18 @@
+node_modules
+
+# Secrets
+.env
+.env.local
+
+# Logs
+logs
+*.log
+
+# Build
+dist
+tsconfig.tsbuildinfo
+pnpm-lock.yaml
+*.min.js
+
+# Docs
+*.md
