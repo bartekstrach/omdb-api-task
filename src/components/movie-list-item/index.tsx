@@ -1,6 +1,6 @@
 import { HeartIcon, InformationCircleIcon, StarIcon } from '@heroicons/react/24/outline';
 
-import { MovieShortInfo } from '../../types/omdb.types';
+import { MovieShortInfo } from '../../types';
 
 interface Props {
     movieInfo: MovieShortInfo;
@@ -15,10 +15,10 @@ export const MovieListItem = ({ movieInfo }: Props) => {
             >
                 <HeartIcon className="hover:fill-current h-6 w-6 text-gray-900" />
             </button>
-            <img src={movieInfo.Poster} className="max-h-[100px]" />
+            <img src={movieInfo.poster} className="max-h-[100px]" />
             <div className="min-w-0 flex flex-col">
-                <h3 className="font-semibold truncate">{movieInfo.Title}</h3>
-                <span>{movieInfo.Year}</span>
+                <h3 className="font-semibold truncate">{movieInfo.title}</h3>
+                <span>{movieInfo.year}</span>
             </div>
             <div className="flex items-center space-x-1">
                 <StarIcon className="h-6 w-6 text-gray-900" />

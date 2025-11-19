@@ -1,13 +1,14 @@
 import {
-    MovieDetails,
+    MovieDetailsResponse,
     SearchByRequestParams,
     SearchMoviesRequestParams,
     SearchMoviesResponse,
-} from '../../types/omdb.types';
+} from '../../types';
 import { queryBuilder } from '../../utils/api';
 
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
-const BASE_URL = `http://www.omdbapi.com/?apikey=${API_KEY}`;
+const API_VERSION = '1';
+const BASE_URL = `http://www.omdbapi.com/?apikey=${API_KEY}&v=${API_VERSION}`;
 
 export const fetchMovies = async (
     params: SearchMoviesRequestParams
@@ -23,7 +24,9 @@ export const fetchMovies = async (
     return res.json();
 };
 
-export const fetchMovieDetails = async (params: SearchByRequestParams): Promise<MovieDetails> => {
+export const fetchMovieDetails = async (
+    params: SearchByRequestParams
+): Promise<MovieDetailsResponse> => {
     const queryParams = queryBuilder(params);
 
     const res = await fetch(`${BASE_URL}&${queryParams}`);

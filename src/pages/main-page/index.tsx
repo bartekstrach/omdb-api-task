@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { FunnelIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import { MovieListItem } from '../../components/movie-list-item';
-import { fetchMovies } from '../../services/omdb/api';
-import { SearchMoviesResponse } from '../../types/omdb.types';
+import omdbService from '../../services/omdb';
+import { MoviesSearchResult } from '../../types';
 
 export const MainPage = () => {
     const [title, setTitle] = useState<string>('');
-    const [searchMovieResponse, setSearchMovieResponse] = useState<SearchMoviesResponse>();
+    const [searchMovieResponse, setSearchMovieResponse] = useState<MoviesSearchResult>();
 
     const onSearchBarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
@@ -20,7 +20,7 @@ export const MainPage = () => {
 
     const searchMovies = async () => {
         console.log('searching...');
-        const response = await fetchMovies({ s: title.trim() });
+        const response = await omdbService.getMovies({ s: title.trim() });
         setSearchMovieResponse(response);
     };
 
@@ -69,7 +69,7 @@ export const MainPage = () => {
                 )}
             </div>
             <div className="flex flex-col space-y-2">
-                {searchMovieResponse?.Search?.map(movieInfo => (
+                {searchMovieResponse?.items?.map(movieInfo => (
                     <MovieListItem movieInfo={movieInfo} />
                 ))}
             </div>
