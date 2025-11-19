@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { FunnelIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
-import { fetchMovies } from '../../api/omdb';
 import { MovieListItem } from '../../components/movie-list-item';
+import { fetchMovies } from '../../services/omdb/api';
 import { SearchMoviesResponse } from '../../types/omdb.types';
 
 export const MainPage = () => {
