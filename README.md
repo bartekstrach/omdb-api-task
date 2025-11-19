@@ -1,12 +1,14 @@
 # 🎦 omdb-api-task
 
 ## 🚀 How to run it?
+
 TBD
 
 TODO: `API_KEY` in `.env`
 TODO: handle case when `API_KEY` is not provided
 
 ## 📦 Dependencies
+
 TBD
 
 TODO: add description
