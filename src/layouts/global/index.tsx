@@ -3,21 +3,20 @@ import { Link, Outlet } from 'react-router';
 
 export const GlobalLayout = () => (
     <>
-        <header className="flex items-center justify-between p-8 border-b border-gray-700 bg-teal-100">
+        <header className="flex items-center justify-between p-8 border-b border-gray-700 bg-linear-120 from-teal-500 to-teal-100">
             <Link
-                to="/"
-                className="flex space-x-4"
                 aria-label="Go to main page"
+                className="flex space-x-4"
+                to="/"
             >
                 <VideoCameraIcon className="h-9 w-9 text-gray-900" />
                 <h1 className="text-3xl font-bold">OMDb API task</h1>
             </Link>
             <Link
-                to="/favorites"
-                className="hover:bg-gray-100 rounded transition-colors"
                 aria-label="View favorites"
+                to="/favorites"
             >
-                <HeartIcon className="h-9 w-9 text-gray-900" />
+                <HeartIcon className="hover:fill-current h-9 w-9 text-gray-900" />
             </Link>
         </header>
 
