@@ -1,2 +1,2 @@
 export * from './movie';
-export * from './omdb.types';
+export * from './omdb';
