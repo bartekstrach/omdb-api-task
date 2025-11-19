@@ -1,10 +1,10 @@
+import { queryBuilder } from './utils';
 import {
     MovieDetails,
     SearchByRequestParams,
     SearchMoviesRequestParams,
     SearchMoviesResponse,
-} from './omdb.types';
-import { queryBuilder } from './utils';
+} from '../types/omdb.types';
 
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 const BASE_URL = `http://www.omdbapi.com/?apikey=${API_KEY}`;
