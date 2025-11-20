@@ -2,8 +2,7 @@ import { useState } from 'react';
 
 import { FunnelIcon } from '@heroicons/react/24/outline';
 
-import { MovieList } from '../../components/movie-list';
-import { SearchBar } from '../../components/search-bar';
+import { MovieList, SearchBar } from '../../components';
 import { useFavorites } from '../../hooks';
 
 export const FavoritesPage = () => {

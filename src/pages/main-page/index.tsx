@@ -1,10 +1,6 @@
 import { useActionState, useEffect, useState, useTransition } from 'react';
 
-import { MovieList } from '../../components/movie-list';
-import { Pagination } from '../../components/pagination';
-import { SearchBar } from '../../components/search-bar';
-import { TypeDropdown } from '../../components/type-dropdown';
-import { YearInput } from '../../components/year-input';
+import { MovieList, Pagination, SearchBar, TypeDropdown, YearInput } from '../../components';
 import { useMovieSearchParams } from '../../hooks';
 import omdbService from '../../services/omdb';
 import { MoviesSearchResult, MovieType } from '../../types';
