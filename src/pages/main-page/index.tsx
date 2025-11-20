@@ -11,7 +11,7 @@ import { MoviesSearchResult } from '../../types';
 export const MainPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const q = searchParams.get('q') ?? '';
-    // const currentPage = searchParams.get('page') ?? '1';
+    const currentPage = parseInt(searchParams.get('page') ?? '1');
 
     const [searchBox, setSearchBox] = useState<string>(q);
 
@@ -19,13 +19,13 @@ export const MainPage = () => {
 
     const [searchMovieResponse, runSearchAction, isSearching] = useActionState<
         MoviesSearchResult | undefined,
-        { title: string }
-    >(async (_prev, { title }) => {
-        if (!title) {
+        { page: number; title: string }
+    >(async (_prev, { page, title }) => {
+        if (!title || page < 1) {
             return undefined;
         }
 
-        return await omdbService.getMovies({ s: title });
+        return await omdbService.getMovies({ s: title, page });
     }, undefined);
 
     const searchMovies = async () => {
@@ -41,8 +41,17 @@ export const MainPage = () => {
 
             urlSearchParams.set('q', trimmed);
             setSearchParams(urlSearchParams);
+            runSearchAction({ page: currentPage, title: trimmed });
+        });
+    };
 
-            runSearchAction({ title: trimmed });
+    const handlePageChange = (newPage: number) => {
+        startTransition(() => {
+            const urlSearchParams = new URLSearchParams(searchParams);
+            urlSearchParams.set('page', newPage.toString());
+            setSearchParams(urlSearchParams);
+
+            runSearchAction({ page: newPage, title: q });
         });
     };
 
@@ -54,7 +63,7 @@ export const MainPage = () => {
         }
 
         startTransition(() => {
-            runSearchAction({ title: trimmed });
+            runSearchAction({ page: currentPage, title: trimmed });
         });
     }, []);
 
@@ -79,7 +88,26 @@ export const MainPage = () => {
                 )}
             </div>
             <MovieList movies={searchMovieResponse?.items || []} />
-            <p>Pagination</p>
+
+            {searchMovieResponse?.totalResults && (
+                <div className='flex justify-center items-center gap-8'>
+                    <button
+                        className='bg-teal-100 hover:bg-teal-500 px-4 py-2 cursor-pointer'
+                        disabled={currentPage <= 1}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                    >
+                        Previous
+                    </button>
+                    <span>{currentPage} of {searchMovieResponse?.pages}</span>
+                    <button
+                        className='bg-teal-100 hover:bg-teal-500 px-4 py-2 cursor-pointer'
+                        disabled={currentPage >= (searchMovieResponse?.pages || 1)}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
