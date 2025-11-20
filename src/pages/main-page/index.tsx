@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router';
 
 import { MovieList } from '../../components/movie-list';
 import { SearchBar } from '../../components/search-bar';
+import { TypeDropdown } from '../../components/type-dropdown';
 import { YearInput } from '../../components/year-input';
 import omdbService from '../../services/omdb';
 import { MoviesSearchResult, MovieType } from '../../types';
@@ -80,16 +81,6 @@ export const MainPage = () => {
         });
     };
 
-    const handleTypeDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-
-        if (value === 'all') {
-            setSelectedType(undefined);
-        } else if (['movie', 'series', 'episode'].includes(value)) {
-            setSelectedType(value as MovieType);
-        }
-    };
-
     useEffect(() => {
         const trimmed = q.trim();
 
@@ -117,23 +108,7 @@ export const MainPage = () => {
             />
             <div className="flex items-center justify-between">
                 <div className="flex gap-8">
-                    {/* Type Dropdown */}
-                    <div className="flex items-center space-x-4">
-                        <label htmlFor="type" className="font-semibold">
-                            Type
-                        </label>
-                        <select
-                            id="type"
-                            value={selectedType}
-                            onChange={handleTypeDropdownChange}
-                            className="border border-gray-700 px-4 py-2"
-                        >
-                            <option value="all">All</option>
-                            <option value="movie">Movie</option>
-                            <option value="series">Series</option>
-                            <option value="episode">Episode</option>
-                        </select>
-                    </div>
+                    <TypeDropdown onChange={setSelectedType} value={selectedType} />
 
                     <YearInput
                         value={selectedYear}
