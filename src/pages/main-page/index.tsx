@@ -3,6 +3,7 @@ import { useActionState, useEffect, useState, useTransition } from 'react';
 import { useSearchParams } from 'react-router';
 
 import { MovieList } from '../../components/movie-list';
+import { Pagination } from '../../components/pagination';
 import { SearchBar } from '../../components/search-bar';
 import { TypeDropdown } from '../../components/type-dropdown';
 import { YearInput } from '../../components/year-input';
@@ -106,6 +107,7 @@ export const MainPage = () => {
                 onSearch={searchMovies}
                 value={searchBox}
             />
+
             <div className="flex items-center justify-between">
                 <div className="flex gap-8">
                     <TypeDropdown onChange={setSelectedType} value={selectedType} />
@@ -122,28 +124,15 @@ export const MainPage = () => {
                     <>Found {searchMovieResponse.totalResults} records</>
                 )}
             </div>
+
             <MovieList movies={searchMovieResponse?.items || []} />
 
             {searchMovieResponse?.totalResults && (
-                <div className="flex justify-center items-center gap-8">
-                    <button
-                        className="bg-teal-100 hover:bg-teal-500 px-4 py-2 cursor-pointer"
-                        disabled={currentPage <= 1}
-                        onClick={() => handlePageChange(currentPage - 1)}
-                    >
-                        Previous
-                    </button>
-                    <span>
-                        {currentPage} of {searchMovieResponse?.pages}
-                    </span>
-                    <button
-                        className="bg-teal-100 hover:bg-teal-500 px-4 py-2 cursor-pointer"
-                        disabled={currentPage >= (searchMovieResponse?.pages || 1)}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                    >
-                        Next
-                    </button>
-                </div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={searchMovieResponse.pages || 1}
+                    onPageChange={handlePageChange}
+                />
             )}
         </div>
     );
