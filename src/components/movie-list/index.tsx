@@ -1,5 +1,5 @@
-import { MovieShortInfo } from "../../types";
-import { MovieListItem } from "../movie-list-item";
+import { MovieShortInfo } from '../../types';
+import { MovieListItem } from '../movie-list-item';
 
 interface Props {
     movies: MovieShortInfo[];

@@ -8,7 +8,13 @@ interface Props {
     value: string;
 }
 
-export const SearchBar = ({ isLoading, onChange, onSearch, placeholder = "Search by...", value }: Props) => {
+export const SearchBar = ({
+    isLoading,
+    onChange,
+    onSearch,
+    placeholder = 'Search by...',
+    value,
+}: Props) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value);
     };
@@ -16,7 +22,7 @@ export const SearchBar = ({ isLoading, onChange, onSearch, placeholder = "Search
     const clearSearch = () => {
         onChange('');
     };
-    
+
     return (
         <div className="flex space-x-4">
             <div className="flex-1 relative">

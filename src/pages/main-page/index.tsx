@@ -13,11 +13,14 @@ export const MainPage = () => {
     const q = searchParams.get('q') ?? '';
     // const currentPage = searchParams.get('page') ?? '1';
 
-    const [searchBox, setSearchBox] = useState<string>(q); 
+    const [searchBox, setSearchBox] = useState<string>(q);
 
     const [isTransitioning, startTransition] = useTransition();
 
-    const [searchMovieResponse, runSearchAction, isSearching] = useActionState<MoviesSearchResult | undefined, { title: string}>(async (_prev, { title }) => {
+    const [searchMovieResponse, runSearchAction, isSearching] = useActionState<
+        MoviesSearchResult | undefined,
+        { title: string }
+    >(async (_prev, { title }) => {
         if (!title) {
             return undefined;
         }
@@ -39,9 +42,8 @@ export const MainPage = () => {
             urlSearchParams.set('q', trimmed);
             setSearchParams(urlSearchParams);
 
-            runSearchAction({ title: trimmed});
+            runSearchAction({ title: trimmed });
         });
-
     };
 
     useEffect(() => {
@@ -52,7 +54,7 @@ export const MainPage = () => {
         }
 
         startTransition(() => {
-            runSearchAction({ title: trimmed});
+            runSearchAction({ title: trimmed });
         });
     }, []);
 
