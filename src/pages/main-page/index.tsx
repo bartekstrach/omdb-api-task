@@ -1,6 +1,9 @@
 import { useActionState, useEffect, useState, useTransition } from 'react';
 
-import { MovieList, Pagination, SearchBar, TypeDropdown, YearInput } from '../../components';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+
+import { MovieList, Pagination, TypeDropdown, YearInput } from '../../components';
+import { TitleInput } from '../../components/title-input';
 import { useMovieSearchParams } from '../../hooks';
 import omdbService from '../../services/omdb';
 import { MoviesSearchResult, MovieType } from '../../types';
@@ -79,15 +82,15 @@ export const MainPage = () => {
 
     return (
         <div className="flex flex-col space-y-4">
-            <SearchBar
-                isLoading={isLoading}
-                onChange={setSearchBox}
-                onSearch={searchMovies}
-                value={searchBox}
-            />
-
             <div className="flex items-center justify-between">
                 <div className="flex gap-8">
+                    <TitleInput
+                        label="Title"
+                        placeholder="Search by title..."
+                        onChange={setSearchBox}
+                        value={searchBox}
+                    />
+
                     <TypeDropdown onChange={setSelectedType} value={selectedType} />
 
                     <YearInput
@@ -96,10 +99,19 @@ export const MainPage = () => {
                         minYear={1900}
                         maxYear={2025}
                     />
+
+                    <button
+                        className="flex items-center space-x-2 bg-teal-100 hover:bg-teal-500 px-4 py-2 cursor-pointer"
+                        disabled={isLoading}
+                        onClick={searchMovies}
+                    >
+                        <MagnifyingGlassIcon className="h-6 w-6 text-gray-900" />
+                        <span>Search</span>
+                    </button>
                 </div>
 
                 {searchMovieResponse?.totalResults && (
-                    <>Found {searchMovieResponse.totalResults} records</>
+                    <span>Found {searchMovieResponse.totalResults} records</span>
                 )}
             </div>
 
