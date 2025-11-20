@@ -17,6 +17,8 @@ export const GlobalLayout = () => (
             <Outlet />
         </main>
 
-        <footer className="text-right p-8 md:px-16 lg:px-32 xl:px-48 border-t border-gray-700 text-gray-700">© Bartek Strach</footer>
+        <footer className="text-right p-8 md:px-16 lg:px-32 xl:px-48 border-t border-gray-700 text-gray-700">
+            © Bartek Strach
+        </footer>
     </>
 );
