@@ -5,12 +5,15 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 
 import './style.css';
+import { FavoritesProvider } from './contexts/favorites';
 import AppRoutes from './pages/routes.tsx';
 
 createRoot(document.getElementById('root')!).render(
     // <StrictMode>
-    <BrowserRouter>
-        <AppRoutes />
-    </BrowserRouter>
+    <FavoritesProvider>
+        <BrowserRouter>
+            <AppRoutes />
+        </BrowserRouter>
+    </FavoritesProvider>
     // </StrictMode>
 );
