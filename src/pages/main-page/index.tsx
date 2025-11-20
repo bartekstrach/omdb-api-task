@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useActionState, useEffect, useState, useTransition } from 'react';
 
 import { FunnelIcon } from '@heroicons/react/24/outline';
+import { useSearchParams } from 'react-router';
 
 import { MovieList } from '../../components/movie-list';
 import { SearchBar } from '../../components/search-bar';
@@ -8,23 +9,60 @@ import omdbService from '../../services/omdb';
 import { MoviesSearchResult } from '../../types';
 
 export const MainPage = () => {
-    const [title, setTitle] = useState<string>('');
-    const [searchMovieResponse, setSearchMovieResponse] = useState<MoviesSearchResult>();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const q = searchParams.get('q') ?? '';
+    // const currentPage = searchParams.get('page') ?? '1';
+
+    const [searchBox, setSearchBox] = useState<string>(q); 
+
+    const [isTransitioning, startTransition] = useTransition();
+
+    const [searchMovieResponse, runSearchAction, isSearching] = useActionState<MoviesSearchResult | undefined, { title: string}>(async (_prev, { title }) => {
+        if (!title) {
+            return undefined;
+        }
+
+        return await omdbService.getMovies({ s: title });
+    }, undefined);
 
     const searchMovies = async () => {
-        console.log('searching...');
-        const response = await omdbService.getMovies({ s: title.trim() });
-        console.log('api response');
-        console.log(searchMovieResponse);
-        setSearchMovieResponse(response);
+        const trimmed = searchBox.trim();
+        const urlSearchParams = new URLSearchParams(searchParams);
+
+        startTransition(() => {
+            if (!trimmed) {
+                urlSearchParams.delete('q');
+                setSearchParams(urlSearchParams);
+                return;
+            }
+
+            urlSearchParams.set('q', trimmed);
+            setSearchParams(urlSearchParams);
+
+            runSearchAction({ title: trimmed});
+        });
+
     };
+
+    useEffect(() => {
+        const trimmed = q.trim();
+
+        if (!trimmed) {
+            return;
+        }
+
+        startTransition(() => {
+            runSearchAction({ title: trimmed});
+        });
+    }, []);
 
     return (
         <div className="flex flex-col space-y-4">
             <SearchBar
-                onChange={setTitle}
+                isLoading={isSearching || isTransitioning}
+                onChange={setSearchBox}
                 onSearch={searchMovies}
-                value={title}
+                value={searchBox}
             />
             <div className="flex items-center justify-between">
                 <button

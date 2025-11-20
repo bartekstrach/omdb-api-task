@@ -1,13 +1,14 @@
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 interface Props {
+    isLoading: boolean;
     onChange: (value: string) => void;
     onSearch: () => void;
     placeholder?: string;
     value: string;
 }
 
-export const SearchBar = ({ onChange, onSearch, placeholder = "Search by...", value }: Props) => {
+export const SearchBar = ({ isLoading, onChange, onSearch, placeholder = "Search by...", value }: Props) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value);
     };
@@ -23,6 +24,7 @@ export const SearchBar = ({ onChange, onSearch, placeholder = "Search by...", va
                     className="w-full border border-gray-700 p-2"
                     onChange={handleChange}
                     placeholder={placeholder}
+                    value={value ?? ''}
                 />
                 {value && (
                     <button
@@ -36,6 +38,7 @@ export const SearchBar = ({ onChange, onSearch, placeholder = "Search by...", va
             </div>
             <button
                 className="flex items-center space-x-2 bg-teal-100 hover:bg-teal-500 px-4 py-2 cursor-pointer"
+                disabled={isLoading}
                 onClick={onSearch}
             >
                 <MagnifyingGlassIcon className="h-6 w-6 text-gray-900" />
