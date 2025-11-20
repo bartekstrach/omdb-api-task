@@ -1,29 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { FunnelIcon } from '@heroicons/react/24/outline';
 
 import { MovieList } from '../../components/movie-list';
 import { SearchBar } from '../../components/search-bar';
-import { MovieShortInfo } from '../../types';
-import { getFavorites } from '../../utils/favorites';
+import { useFavorites } from '../../hooks';
 
 export const FavoritesPage = () => {
-    const [favorites, setFavorites] = useState<MovieShortInfo[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [searchBox, setSearchBox] = useState<string>('');
-
-    useEffect(() => {
-        const fetchFavorites = async () => {
-            setIsLoading(true);
-
-            const data = await getFavorites();
-
-            setFavorites(data);
-            setIsLoading(false);
-        };
-
-        fetchFavorites();
-    }, []);
+    // const [favorites, isLoading] = useFavorites();
+    const { favorites, isLoading } = useFavorites();
 
     const filteredFavorites = favorites.filter(movie =>
         movie.title.toLowerCase().includes(searchBox.toLowerCase())

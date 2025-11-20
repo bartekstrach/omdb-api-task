@@ -4,9 +4,9 @@ import { HeartIcon as HeartIconOutlined, StarIcon } from '@heroicons/react/24/ou
 import { HeartIcon } from '@heroicons/react/24/solid';
 import { useParams } from 'react-router';
 
+import { useFavorites } from '../../hooks';
 import omdbService from '../../services/omdb';
 import { MovieDetailedInfo } from '../../types';
-import { addToFavorites, isFavorite, removeFromFavorites } from '../../utils/favorites';
 
 export const MovieDetailsPage = () => {
     const { id } = useParams();
@@ -14,6 +14,8 @@ export const MovieDetailsPage = () => {
     const [isFav, setIsFav] = useState(false);
     const [movieDetails, setMovieDetails] = useState<MovieDetailedInfo>();
 
+    const { addToFavorites, isFavorite, removeFromFavorites } = useFavorites();
+    
     useEffect(() => {
         const fetchMovieDetails = async (movieId: string) => {
             const response = await omdbService.getMovieDetails({ i: movieId, plot: 'full' });

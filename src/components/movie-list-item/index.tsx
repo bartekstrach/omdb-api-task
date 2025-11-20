@@ -8,8 +8,8 @@ import {
 import { HeartIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router';
 
+import { useFavorites } from '../../hooks';
 import { MovieShortInfo } from '../../types';
-import { addToFavorites, isFavorite, removeFromFavorites } from '../../utils/favorites';
 
 interface Props {
     movieInfo: MovieShortInfo;
@@ -19,7 +19,8 @@ export const MovieListItem = ({ movieInfo }: Props) => {
     const { id, poster, title, year } = movieInfo;
 
     const [isFav, setIsFav] = useState(false);
-
+    const { addToFavorites, isFavorite, removeFromFavorites } = useFavorites();
+    
     useEffect(() => {
         const fetchFavoriteStatus = async () => {
             const favoriteStatus = await isFavorite(id);
