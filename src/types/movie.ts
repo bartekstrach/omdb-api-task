@@ -1,3 +1,5 @@
+export type MovieType = 'movie' | 'series' | 'episode';
+
 export type MovieDetailedInfo = {
     id: string;
     actors: string;
@@ -10,7 +12,7 @@ export type MovieDetailedInfo = {
     released: string;
     runtime: string;
     title: string;
-    type: 'movie' | 'series' | 'episode';
+    type: MovieType;
     votes: string;
     writer: string;
     year: string;
@@ -20,7 +22,7 @@ export type MovieShortInfo = {
     id: string;
     poster: string;
     title: string;
-    type: 'movie' | 'series' | 'episode';
+    type: MovieType;
     year: string;
 };
 
