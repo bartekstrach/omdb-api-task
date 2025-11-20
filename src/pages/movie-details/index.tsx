@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useActionState, useEffect, useState, useTransition } from 'react';
 
 import { useParams } from 'react-router';
 
@@ -7,34 +7,41 @@ import omdbService from '../../services/omdb';
 import { MovieDetailedInfo } from '../../types';
 import { MovieDetailsContent } from './components/content';
 import { MovieDetailsHeader } from './components/header';
+import { LoadingSpinner } from '../../components';
 
 export const MovieDetailsPage = () => {
     const { id } = useParams();
-
-    const [isFav, setIsFav] = useState(false);
-    const [movieDetails, setMovieDetails] = useState<MovieDetailedInfo>();
-
     const { addToFavorites, isFavorite, removeFromFavorites } = useFavorites();
 
-    useEffect(() => {
-        const fetchMovieDetails = async (movieId: string) => {
-            const response = await omdbService.getMovieDetails({ i: movieId, plot: 'full' });
-            setMovieDetails(response);
-        };
+    const [isFav, setIsFav] = useState(false);
+    const [isTransitioning, startTransition] = useTransition();
 
-        const fetchFavoriteStatus = async (movieId: string) => {
-            const favoriteStatus = await isFavorite(movieId);
+    const [movieDetails, fetchMovieDetails, isFetching] = useActionState<
+        MovieDetailedInfo | undefined,
+        string
+    >(async (_prev, movieId) => {
+        return await omdbService.getMovieDetails({ i: movieId, plot: 'full' });
+    }, undefined);
+
+    const isLoading = isFetching || isTransitioning;
+
+    useEffect(() => {
+        const loadData = async () => {
+            if (!id) return;
+
+            fetchMovieDetails(id);
+
+            const favoriteStatus = await isFavorite(id);
             setIsFav(favoriteStatus);
         };
 
-        if (id) {
-            fetchMovieDetails(id);
-            fetchFavoriteStatus(id);
-        }
-    }, [id, isFavorite]);
+        startTransition(() => {
+            loadData();
+        });
+    }, [id]);
 
     const handleFavorite = async () => {
-        if (!id) {
+        if (!id || !movieDetails) {
             return;
         }
 
@@ -42,10 +49,6 @@ export const MovieDetailsPage = () => {
             await removeFromFavorites(id);
         } else {
             // TODO mapper?
-            if (!movieDetails) {
-                return;
-            }
-
             await addToFavorites({
                 id: movieDetails.id,
                 poster: movieDetails.poster,
@@ -58,13 +61,21 @@ export const MovieDetailsPage = () => {
         setIsFav(!isFav);
     };
 
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
+
     if (!movieDetails) {
-        return <>No data</>;
+        return (
+            <div className="flex items-center flex-col gap-4">
+                <h2 className="font-bold text-3xl">Movie not found</h2>
+                <p>Go back to the home page and find a different one</p>
+            </div>
+        );
     }
 
     return (
         <div className="flex flex-col md:flex-row p-4 md:p-6">
-            {/* Poster */}
             <img
                 alt={`${movieDetails.title} poster`}
                 className="w-full md:w-80 h-auto h-fit"
