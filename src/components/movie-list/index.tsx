@@ -1,20 +1,21 @@
 import { MovieShortInfo } from '../../types';
+import { EmptyState } from '../empty-state';
 import { LoadingSpinner } from '../loading-spinner';
 import { MovieListItem } from '../movie-list-item';
-import { NoData } from '../no-data';
 
 interface Props {
+    hasSearched: boolean;
     isLoading: boolean;
     movies: MovieShortInfo[];
 }
 
-export const MovieList = ({ isLoading, movies }: Props) => {
+export const MovieList = ({ hasSearched, isLoading, movies }: Props) => {
     if (isLoading) {
         return <LoadingSpinner />;
     }
 
     if (!movies || movies.length === 0) {
-        return <NoData />;
+        return <EmptyState hasSearched={hasSearched} />;
     }
 
     return (

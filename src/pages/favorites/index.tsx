@@ -24,7 +24,8 @@ export const FavoritesPage = () => {
                 {filteredFavorites.length && <span>Found {filteredFavorites.length} records</span>}
             </div>
 
-            <MovieList isLoading={isLoading} movies={filteredFavorites} />
+            <MovieList hasSearched isLoading={isLoading} movies={filteredFavorites} />
+
             <p>Pagination</p>
         </div>
     );

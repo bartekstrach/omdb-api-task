@@ -115,7 +115,11 @@ export const MainPage = () => {
                 )}
             </div>
 
-            <MovieList isLoading={isLoading} movies={searchMovieResponse?.items || []} />
+            <MovieList
+                hasSearched={!!q.trim()}
+                isLoading={isLoading}
+                movies={searchMovieResponse?.items || []}
+            />
 
             {searchMovieResponse?.totalResults && !isLoading && (
                 <Pagination
