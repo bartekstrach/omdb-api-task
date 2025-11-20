@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { FunnelIcon } from '@heroicons/react/24/outline';
 
-import { MovieListItem } from '../../components/movie-list-item';
+import { MovieList } from '../../components/movie-list';
 import { SearchBar } from '../../components/search-bar';
 import omdbService from '../../services/omdb';
 import { MoviesSearchResult } from '../../types';
@@ -38,11 +38,7 @@ export const MainPage = () => {
                     <>Found {searchMovieResponse.totalResults} records</>
                 )}
             </div>
-            <div className="flex flex-col space-y-2">
-                {searchMovieResponse?.items?.map(movieInfo => (
-                    <MovieListItem key={`movie-${movieInfo.id}`} movieInfo={movieInfo} />
-                ))}
-            </div>
+            <MovieList movies={searchMovieResponse?.items || []} />
             <p>Pagination</p>
         </div>
     );
