@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
-import { HeartIcon as HeartIconOutlined, StarIcon } from '@heroicons/react/24/outline';
-import { HeartIcon } from '@heroicons/react/24/solid';
 import { useParams } from 'react-router';
 
 import { useFavorites } from '../../hooks';
 import omdbService from '../../services/omdb';
 import { MovieDetailedInfo } from '../../types';
+import { MovieDetailsContent } from './components/content';
+import { MovieDetailsHeader } from './components/header';
 
 export const MovieDetailsPage = () => {
     const { id } = useParams();
@@ -72,72 +72,24 @@ export const MovieDetailsPage = () => {
             />
 
             <div className="flex flex-col flex-1">
-                {/* Header */}
-                <div className="flex justify-between bg-gradient-to-br from-white to-gray-200 p-8">
-                    <div className="flex flex-col">
-                        {/* Title */}
-                        <div className="flex gap-x-4">
-                            <h2 className="text-3xl font-bold">{movieDetails.title}</h2>
-                            <button
-                                className="rounded transition-colors cursor-pointer"
-                                aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
-                                onClick={handleFavorite}
-                            >
-                                {isFav ? (
-                                    <HeartIcon className="h-6 w-6 text-gray-900" />
-                                ) : (
-                                    <HeartIconOutlined className="hover:fill-current h-6 w-6 text-gray-900" />
-                                )}
-                            </button>
-                        </div>
+                <MovieDetailsHeader
+                    isFavorite={isFav}
+                    onToggleFavorite={handleFavorite}
+                    rating={movieDetails.rating}
+                    runtime={movieDetails.runtime}
+                    title={movieDetails.title}
+                    type={movieDetails.type}
+                    votes={movieDetails.votes}
+                    year={movieDetails.year}
+                />
 
-                        {/* Year */}
-                        <span>{movieDetails.year}</span>
-
-                        {/* Runtime + type */}
-                        <div className="flex items-center gap-4 flex-wrap">
-                            <span>{movieDetails.runtime}</span>
-                            <span className="border border-gray-700 rounded-xl p-1">
-                                {movieDetails.type}
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Rating */}
-                    <div className="flex gap-1">
-                        <StarIcon className="h-6 w-6 text-gray-900" />
-                        <span className="font-semibold">{movieDetails.rating}</span>
-                        <span>{`(${movieDetails.votes})`}</span>
-                    </div>
-                </div>
-
-                {/* Details */}
-                <div className="flex flex-col p-8 gap-8">
-                    {/* Genre */}
-                    <div>
-                        <h3 className="text-xl font-bold underline">Genre</h3>
-                        <span>{movieDetails.genre}</span>
-                    </div>
-
-                    {/* Cast */}
-                    <div>
-                        <h3 className="text-xl font-bold underline">Cast</h3>
-                        <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2">
-                            <dt className="font-semibold">Actors</dt>
-                            <dd>{movieDetails.actors}</dd>
-                            <dt className="font-semibold">Director</dt>
-                            <dd>{movieDetails.director}</dd>
-                            <dt className="font-semibold">Writers</dt>
-                            <dd>{movieDetails.writer}</dd>
-                        </dl>
-                    </div>
-
-                    {/* Plot */}
-                    <div>
-                        <h3 className="text-xl font-bold underline">Plot</h3>
-                        <p>{movieDetails.plot}</p>
-                    </div>
-                </div>
+                <MovieDetailsContent
+                    actors={movieDetails.actors}
+                    director={movieDetails.director}
+                    genre={movieDetails.genre}
+                    plot={movieDetails.plot}
+                    writer={movieDetails.writer}
+                />
             </div>
         </div>
     );
