@@ -6,13 +6,7 @@ interface Props {
     plot: string;
 }
 
-export const MovieDetailsContent = ({
-    genre,
-    actors,
-    director,
-    writer,
-    plot,
-}: Props) => (
+export const MovieDetailsContent = ({ genre, actors, director, writer, plot }: Props) => (
     <div className="flex flex-col p-8 gap-8">
         <div>
             <h3 className="text-xl font-bold underline">Genre</h3>
