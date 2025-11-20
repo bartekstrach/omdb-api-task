@@ -1,26 +1,20 @@
 import { useActionState, useEffect, useState, useTransition } from 'react';
 
-import { useSearchParams } from 'react-router';
-
 import { MovieList } from '../../components/movie-list';
 import { Pagination } from '../../components/pagination';
 import { SearchBar } from '../../components/search-bar';
 import { TypeDropdown } from '../../components/type-dropdown';
 import { YearInput } from '../../components/year-input';
+import { useMovieSearchParams } from '../../hooks';
 import omdbService from '../../services/omdb';
 import { MoviesSearchResult, MovieType } from '../../types';
 
 export const MainPage = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const q = searchParams.get('q') ?? '';
-    const currentPage = parseInt(searchParams.get('page') ?? '1');
-    const currentType = searchParams.get('type') ?? '';
-    const currentYear = searchParams.get('y') ?? '';
+    const { params, updateParams } = useMovieSearchParams();
+    const { q, page: currentPage, type: currentType, year: currentYear } = params;
 
     const [searchBox, setSearchBox] = useState<string>(q);
-    const [selectedType, setSelectedType] = useState<MovieType | undefined>(
-        currentType as MovieType | undefined
-    );
+    const [selectedType, setSelectedType] = useState<MovieType | undefined>(currentType);
     const [selectedYear, setSelectedYear] = useState<string>(currentYear);
 
     const [isTransitioning, startTransition] = useTransition();
@@ -38,30 +32,18 @@ export const MainPage = () => {
 
     const searchMovies = async () => {
         const trimmed = searchBox.trim();
-        const urlSearchParams = new URLSearchParams(searchParams);
 
         startTransition(() => {
             if (!trimmed) {
-                urlSearchParams.delete('q');
-                setSearchParams(urlSearchParams);
+                updateParams({ q: '' });
                 return;
             }
 
-            urlSearchParams.set('q', trimmed);
-
-            if (selectedType) {
-                urlSearchParams.set('type', selectedType);
-            } else {
-                urlSearchParams.delete('type');
-            }
-
-            if (selectedYear) {
-                urlSearchParams.set('y', selectedYear);
-            } else {
-                urlSearchParams.delete('y');
-            }
-
-            setSearchParams(urlSearchParams);
+            updateParams({
+                q: trimmed,
+                type: selectedType,
+                year: selectedYear,
+            });
 
             runSearchAction({
                 page: currentPage,
@@ -74,9 +56,7 @@ export const MainPage = () => {
 
     const handlePageChange = (newPage: number) => {
         startTransition(() => {
-            const urlSearchParams = new URLSearchParams(searchParams);
-            urlSearchParams.set('page', newPage.toString());
-            setSearchParams(urlSearchParams);
+            updateParams({ page: newPage });
 
             runSearchAction({ page: newPage, title: q, type: selectedType, year: selectedYear });
         });
