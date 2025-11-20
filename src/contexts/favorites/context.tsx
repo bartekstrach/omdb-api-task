@@ -8,6 +8,6 @@ type FavoritesContextType = {
     addToFavorites: (movie: MovieShortInfo) => void;
     isFavorite: (id: string) => Promise<boolean>;
     removeFromFavorites: (id: string) => void;
-}
+};
 
 export const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);

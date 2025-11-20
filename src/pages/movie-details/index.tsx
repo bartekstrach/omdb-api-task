@@ -15,7 +15,7 @@ export const MovieDetailsPage = () => {
     const [movieDetails, setMovieDetails] = useState<MovieDetailedInfo>();
 
     const { addToFavorites, isFavorite, removeFromFavorites } = useFavorites();
-    
+
     useEffect(() => {
         const fetchMovieDetails = async (movieId: string) => {
             const response = await omdbService.getMovieDetails({ i: movieId, plot: 'full' });

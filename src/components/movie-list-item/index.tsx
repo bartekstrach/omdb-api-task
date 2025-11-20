@@ -20,7 +20,7 @@ export const MovieListItem = ({ movieInfo }: Props) => {
 
     const [isFav, setIsFav] = useState(false);
     const { addToFavorites, isFavorite, removeFromFavorites } = useFavorites();
-    
+
     useEffect(() => {
         const fetchFavoriteStatus = async () => {
             const favoriteStatus = await isFavorite(id);
