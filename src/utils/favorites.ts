@@ -1,4 +1,4 @@
-import { MovieShortInfo } from "../types";
+import { MovieShortInfo } from '../types';
 
 const FAVORITES_DB_NAME = 'omdb-db';
 const FAVORITES_STORE_NAME = 'favorites';
@@ -26,7 +26,7 @@ const openDB = (): Promise<IDBDatabase> => {
 
 export const addToFavorites = (movie: MovieShortInfo): Promise<void> => {
     return new Promise((resolve, reject) => {
-        openDB().then((db) => {
+        openDB().then(db => {
             const transaction = db.transaction(FAVORITES_STORE_NAME, 'readwrite');
             const store = transaction.objectStore(FAVORITES_STORE_NAME);
             const request = store.add(movie);
@@ -44,7 +44,7 @@ export const addToFavorites = (movie: MovieShortInfo): Promise<void> => {
 
 export const removeFromFavorites = (id: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-        openDB().then((db) => {
+        openDB().then(db => {
             const transaction = db.transaction(FAVORITES_STORE_NAME, 'readwrite');
             const store = transaction.objectStore(FAVORITES_STORE_NAME);
             const request = store.delete(id);
@@ -62,7 +62,7 @@ export const removeFromFavorites = (id: string): Promise<void> => {
 
 export const isFavorite = (id: string): Promise<boolean> => {
     return new Promise((resolve, reject) => {
-        openDB().then((db) => {
+        openDB().then(db => {
             const transaction = db.transaction(FAVORITES_STORE_NAME, 'readonly');
             const store = transaction.objectStore(FAVORITES_STORE_NAME);
             const request = store.get(id);
