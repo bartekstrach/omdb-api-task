@@ -1,9 +1,9 @@
 import { Routes, Route } from 'react-router';
 
 import { FavoritesPage } from './favorites';
+import { GlobalLayout } from './layout';
 import { MainPage } from './main-page';
 import { MovieDetailsPage } from './movie-details';
-import { GlobalLayout } from '../layouts/global';
 
 const AppRoutes = () => (
     <Routes>
