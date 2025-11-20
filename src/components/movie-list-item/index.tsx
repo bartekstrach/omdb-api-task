@@ -54,11 +54,7 @@ export const MovieListItem = ({ movieInfo }: Props) => {
             </button>
 
             {/* Poster */}
-            <img
-                alt={`${title} poster`}
-                className="max-h-[100px]"
-                src={poster}
-            />
+            <img alt={`${title} poster`} className="max-h-[100px]" src={poster} />
 
             {/* Info */}
             <div className="min-w-0 flex flex-col">
