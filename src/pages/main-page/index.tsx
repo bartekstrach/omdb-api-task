@@ -70,7 +70,7 @@ export const MainPage = () => {
             </div>
             <div className="flex flex-col space-y-2">
                 {searchMovieResponse?.items?.map(movieInfo => (
-                    <MovieListItem movieInfo={movieInfo} />
+                    <MovieListItem key={`movie-${movieInfo.id}`} movieInfo={movieInfo} />
                 ))}
             </div>
             <p>Pagination</p>
