@@ -10,9 +10,9 @@
     - formularz wyszukiwania filmów
 
         >
-
                 Q: 1 input czy więcej?
                 Q: debouncer czy enter/przycisk?
+                    A: enter - limit API
 
                 TIP: API wyszukuje po `title`, `type`, `year`
 
@@ -21,7 +21,6 @@
         - typie
 
             >
-
                   Q: gdzie umieścić filtrowanie?
 
                   TIP: `type: movie | series | episode`
@@ -35,22 +34,28 @@
         - lub infinite scroll
             >
                     Q: czy API zwraca wszystkie wyniki i paginacja po stronie klienta, żeby nie renderować wszystkiego?
+                        A: zwraca maks. 10 wyników, liczbę wszystkich rekordów i aktualną stronę, endpoint ma parametr `page`
 
 2.  Widok szczegółów filmu
     - wyświetlenie informacji o filmie (np. tytuł, opis, gatunek, rok, ocena, poster itp.)
         >
                 Q: wyświetlić jako modal, side panel, osobna strona?
+                    A: osobna strona
                 Q: jeżeli nie da się pobrać grafiki (płatne API) to co wstawić w zamian?
+                    A: API zwraca link do małych grafik
 
 3.  Ulubione
     - możliwość dodawania i usuwania filmów z listy „ulubionych”
     - ulubione powinny być trwałe po odświeżeniu strony
         >
                 Q: gdzie przechowywać dane? local storage?
+                    A: indexed db
                 Q: wyświetlić jako modal, side panel, osobna strona, widget?
                     A: osobna strona, taka jak strona główna
                 Q: przechowywać tylko ID czy wszystkie dane o filmie i wysyłać request żeby zaktualizować oceny?
+                    A: przechowywanie całych elementów, ale bez ocen
                 Q: co robić przy usuwaniu z ulubionych?
+                    A: usuwanie z indexed db
 
 ## 💻 Wymagania techniczne
 
@@ -65,7 +70,6 @@
     - być responsywna
 
         >
-
                 Q: wybrać `@media (min-width)` dla mobilnych
 
                 I: mobile-first
@@ -74,6 +78,7 @@
         >
                 Q: która wersja?
                 Q: w jaki sposób zweryfikować?
+
     - być zoptymalizowana pod kątem SEO
         >
                 Q: poczytać o web vitals i w jaki sposób można poprawić SEO
