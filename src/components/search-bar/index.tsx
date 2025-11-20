@@ -42,14 +42,16 @@ export const SearchBar = ({
                     </button>
                 )}
             </div>
-            {onSearch && <button
-                className="flex items-center space-x-2 bg-teal-100 hover:bg-teal-500 px-4 py-2 cursor-pointer"
-                disabled={isLoading}
-                onClick={onSearch}
-            >
-                <MagnifyingGlassIcon className="h-6 w-6 text-gray-900" />
-                <span>Search</span>
-            </button>}
+            {onSearch && (
+                <button
+                    className="flex items-center space-x-2 bg-teal-100 hover:bg-teal-500 px-4 py-2 cursor-pointer"
+                    disabled={isLoading}
+                    onClick={onSearch}
+                >
+                    <MagnifyingGlassIcon className="h-6 w-6 text-gray-900" />
+                    <span>Search</span>
+                </button>
+            )}
         </div>
     );
 };

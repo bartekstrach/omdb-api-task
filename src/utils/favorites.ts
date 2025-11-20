@@ -80,7 +80,7 @@ export const isFavorite = (id: string): Promise<boolean> => {
 
 export const getFavorites = (): Promise<MovieShortInfo[]> => {
     return new Promise((resolve, reject) => {
-        openDB().then((db) => {
+        openDB().then(db => {
             const transaction = db.transaction(FAVORITES_STORE_NAME, 'readonly');
             const store = transaction.objectStore(FAVORITES_STORE_NAME);
             const request = store.getAll();
