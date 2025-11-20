@@ -1,11 +1,17 @@
 import { MovieShortInfo } from '../../types';
+import { LoadingSpinner } from '../loading-spinner';
 import { MovieListItem } from '../movie-list-item';
 
 interface Props {
+    isLoading: boolean;
     movies: MovieShortInfo[];
 }
 
-export const MovieList = ({ movies }: Props) => {
+export const MovieList = ({ isLoading, movies }: Props) => {
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
+
     if (!movies || movies.length === 0) {
         return <p>No items</p>;
     }

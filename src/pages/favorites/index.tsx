@@ -17,7 +17,7 @@ export const FavoritesPage = () => {
             <div className="flex items-center justify-between">
                 {filteredFavorites.length && <span>Found {filteredFavorites.length} records</span>}
             </div>
-            <MovieList movies={filteredFavorites} />
+            <MovieList isLoading={isLoading} movies={filteredFavorites} />
             <p>Pagination</p>
         </div>
     );

@@ -26,6 +26,8 @@ export const MainPage = () => {
         return await omdbService.getMovies({ s: title, page, type, y: year });
     }, undefined);
 
+    const isLoading = isSearching || isTransitioning;
+
     const searchMovies = async () => {
         const trimmed = searchBox.trim();
 
@@ -78,7 +80,7 @@ export const MainPage = () => {
     return (
         <div className="flex flex-col space-y-4">
             <SearchBar
-                isLoading={isSearching || isTransitioning}
+                isLoading={isLoading}
                 onChange={setSearchBox}
                 onSearch={searchMovies}
                 value={searchBox}
@@ -101,9 +103,9 @@ export const MainPage = () => {
                 )}
             </div>
 
-            <MovieList movies={searchMovieResponse?.items || []} />
+            <MovieList isLoading={isLoading} movies={searchMovieResponse?.items || []} />
 
-            {searchMovieResponse?.totalResults && (
+            {searchMovieResponse?.totalResults && !isLoading && (
                 <Pagination
                     currentPage={currentPage}
                     totalPages={searchMovieResponse.pages || 1}
