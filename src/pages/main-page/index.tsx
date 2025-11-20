@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router';
 
 import { MovieList } from '../../components/movie-list';
 import { SearchBar } from '../../components/search-bar';
+import { YearInput } from '../../components/year-input';
 import omdbService from '../../services/omdb';
 import { MoviesSearchResult, MovieType } from '../../types';
 
@@ -12,23 +13,25 @@ export const MainPage = () => {
     const q = searchParams.get('q') ?? '';
     const currentPage = parseInt(searchParams.get('page') ?? '1');
     const currentType = searchParams.get('type') ?? '';
+    const currentYear = searchParams.get('y') ?? '';
 
     const [searchBox, setSearchBox] = useState<string>(q);
     const [selectedType, setSelectedType] = useState<MovieType | undefined>(
         currentType as MovieType | undefined
     );
+    const [selectedYear, setSelectedYear] = useState<string>(currentYear);
 
     const [isTransitioning, startTransition] = useTransition();
 
     const [searchMovieResponse, runSearchAction, isSearching] = useActionState<
         MoviesSearchResult | undefined,
-        { page: number; title: string; type?: MovieType }
-    >(async (_prev, { page, title, type }) => {
+        { page: number; title: string; type: MovieType | undefined; year: string | undefined }
+    >(async (_prev, { page, title, type, year }) => {
         if (!title || page < 1) {
             return undefined;
         }
 
-        return await omdbService.getMovies({ s: title, page, type });
+        return await omdbService.getMovies({ s: title, page, type, y: year });
     }, undefined);
 
     const searchMovies = async () => {
@@ -50,8 +53,20 @@ export const MainPage = () => {
                 urlSearchParams.delete('type');
             }
 
+            if (selectedYear) {
+                urlSearchParams.set('y', selectedYear);
+            } else {
+                urlSearchParams.delete('y');
+            }
+
             setSearchParams(urlSearchParams);
-            runSearchAction({ page: currentPage, title: trimmed, type: selectedType });
+
+            runSearchAction({
+                page: currentPage,
+                title: trimmed,
+                type: selectedType,
+                year: selectedYear,
+            });
         });
     };
 
@@ -61,7 +76,7 @@ export const MainPage = () => {
             urlSearchParams.set('page', newPage.toString());
             setSearchParams(urlSearchParams);
 
-            runSearchAction({ page: newPage, title: q, type: selectedType });
+            runSearchAction({ page: newPage, title: q, type: selectedType, year: selectedYear });
         });
     };
 
@@ -83,7 +98,12 @@ export const MainPage = () => {
         }
 
         startTransition(() => {
-            runSearchAction({ page: currentPage, title: trimmed, type: selectedType });
+            runSearchAction({
+                page: currentPage,
+                title: trimmed,
+                type: selectedType,
+                year: selectedYear,
+            });
         });
     }, []);
 
@@ -96,22 +116,31 @@ export const MainPage = () => {
                 value={searchBox}
             />
             <div className="flex items-center justify-between">
-                {/* Type Dropdown */}
-                <div className="flex items-center space-x-4">
-                    <label htmlFor="type" className="font-semibold">
-                        Type
-                    </label>
-                    <select
-                        id="type"
-                        value={selectedType}
-                        onChange={handleTypeDropdownChange}
-                        className="border border-gray-700 px-4 py-2"
-                    >
-                        <option value="all">All</option>
-                        <option value="movie">Movie</option>
-                        <option value="series">Series</option>
-                        <option value="episode">Episode</option>
-                    </select>
+                <div className="flex gap-8">
+                    {/* Type Dropdown */}
+                    <div className="flex items-center space-x-4">
+                        <label htmlFor="type" className="font-semibold">
+                            Type
+                        </label>
+                        <select
+                            id="type"
+                            value={selectedType}
+                            onChange={handleTypeDropdownChange}
+                            className="border border-gray-700 px-4 py-2"
+                        >
+                            <option value="all">All</option>
+                            <option value="movie">Movie</option>
+                            <option value="series">Series</option>
+                            <option value="episode">Episode</option>
+                        </select>
+                    </div>
+
+                    <YearInput
+                        value={selectedYear}
+                        onChange={setSelectedYear}
+                        minYear={1900}
+                        maxYear={2025}
+                    />
                 </div>
 
                 {searchMovieResponse?.totalResults && (
