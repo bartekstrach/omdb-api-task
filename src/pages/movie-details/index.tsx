@@ -7,7 +7,7 @@ import omdbService from '../../services/omdb';
 import { MovieDetailedInfo } from '../../types';
 import { MovieDetailsContent } from './components/content';
 import { MovieDetailsHeader } from './components/header';
-import { LoadingSpinner } from '../../components';
+import { LoadingSpinner, Message } from '../../components';
 
 export const MovieDetailsPage = () => {
     const { id } = useParams();
@@ -67,10 +67,10 @@ export const MovieDetailsPage = () => {
 
     if (!movieDetails) {
         return (
-            <div className="flex items-center flex-col gap-4">
-                <h2 className="font-bold text-3xl">Movie not found</h2>
-                <p>Go back to the home page and find a different one</p>
-            </div>
+            <Message
+                details="Go back to the home page and find a different one"
+                title="Movie not found"
+            />
         );
     }
 
