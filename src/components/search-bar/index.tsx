@@ -3,7 +3,7 @@ import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 interface Props {
     isLoading: boolean;
     onChange: (value: string) => void;
-    onSearch: () => void;
+    onSearch?: () => void;
     placeholder?: string;
     value: string;
 }
@@ -42,14 +42,14 @@ export const SearchBar = ({
                     </button>
                 )}
             </div>
-            <button
+            {onSearch && <button
                 className="flex items-center space-x-2 bg-teal-100 hover:bg-teal-500 px-4 py-2 cursor-pointer"
                 disabled={isLoading}
                 onClick={onSearch}
             >
                 <MagnifyingGlassIcon className="h-6 w-6 text-gray-900" />
                 <span>Search</span>
-            </button>
+            </button>}
         </div>
     );
 };
