@@ -17,19 +17,23 @@ interface Props {
 export const MovieListItem = ({ movieInfo }: Props) => {
     const { id } = movieInfo;
 
-    const [isFav, setIsFav] = useState(isFavorite(id));
+    const [isFav, setIsFav] = useState(false);
 
     useEffect(() => {
-        setIsFav(isFavorite(id));
+        const fetchFavoriteStatus = async () => {
+            const favoriteStatus = await isFavorite(id);
+            setIsFav(favoriteStatus);
+        };
+
+        fetchFavoriteStatus();
     }, [id]);
 
-    const handleFavorite = () => {
+    const handleFavorite = async () => {
         if (isFav) {
-            removeFromFavorites(id);
+            await removeFromFavorites(id);
         } else {
-            addToFavorites(id);
+            await addToFavorites(movieInfo);
         }
-
         setIsFav(!isFav);
     };
 
