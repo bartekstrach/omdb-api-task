@@ -31,7 +31,7 @@ export const MovieDetailsPage = () => {
             fetchMovieDetails(id);
             fetchFavoriteStatus(id);
         }
-    }, [id]);
+    }, [id, isFavorite]);
 
     const handleFavorite = async () => {
         if (!id) {
