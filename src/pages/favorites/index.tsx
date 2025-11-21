@@ -23,7 +23,10 @@ export const FavoritesPage = () => {
                 />
 
                 {filteredFavorites.length > 0 && (
-                    <span>Found {filteredFavorites.length} records</span>
+                    <span>
+                        Found {filteredFavorites.length}{' '}
+                        {filteredFavorites.length === 1 ? 'record' : 'records'}
+                    </span>
                 )}
             </div>
 

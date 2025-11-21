@@ -115,9 +115,13 @@ export const MainPage = () => {
                     </button>
                 </div>
 
-                {searchMovieResponse.data?.totalResults && (
-                    <span>Found {searchMovieResponse.data.totalResults} records</span>
-                )}
+                {searchMovieResponse.data?.totalResults &&
+                    searchMovieResponse.data.totalResults > 0 && (
+                        <span>
+                            Found {searchMovieResponse.data.totalResults}{' '}
+                            {searchMovieResponse.data.totalResults === 1 ? 'record' : 'records'}
+                        </span>
+                    )}
             </div>
 
             <MovieList
