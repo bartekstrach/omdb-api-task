@@ -131,13 +131,15 @@ export const MainPage = () => {
                 movies={searchMovieResponse.data?.items || []}
             />
 
-            {searchMovieResponse.data?.totalResults && !isLoading && (
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={searchMovieResponse.data.pages || 1}
-                    onPageChange={handlePageChange}
-                />
-            )}
+            {searchMovieResponse.data?.totalResults &&
+                searchMovieResponse.data?.totalResults > 0 &&
+                !isLoading && (
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={searchMovieResponse.data.pages || 1}
+                        onPageChange={handlePageChange}
+                    />
+                )}
         </div>
     );
 };
