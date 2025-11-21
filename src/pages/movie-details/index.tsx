@@ -8,6 +8,7 @@ import { MovieDetailedInfo } from '../../types';
 import { MovieDetailsContent } from './components/content';
 import { MovieDetailsHeader } from './components/header';
 import { LoadingSpinner, Message } from '../../components';
+import { mapMovieDetailedInfoToMovieShortInfo } from '../../utils/mappers';
 
 export const MovieDetailsPage = () => {
     const { id } = useParams();
@@ -62,14 +63,7 @@ export const MovieDetailsPage = () => {
             if (isFav) {
                 await removeFromFavorites(id);
             } else {
-                // TODO mapper?
-                await addToFavorites({
-                    id: movieDetails.data.id,
-                    poster: movieDetails.data.poster,
-                    title: movieDetails.data.title,
-                    type: movieDetails.data.type,
-                    year: movieDetails.data.year,
-                });
+                await addToFavorites(mapMovieDetailedInfoToMovieShortInfo(movieDetails.data));
             }
             setIsFav(!isFav);
         } catch (error) {
