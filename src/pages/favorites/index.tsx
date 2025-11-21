@@ -6,7 +6,7 @@ import { useFavorites } from '../../hooks';
 
 export const FavoritesPage = () => {
     const [searchBox, setSearchBox] = useState<string>('');
-    const { favorites, isLoading } = useFavorites();
+    const { error, favorites, isLoading } = useFavorites();
 
     const filteredFavorites = favorites.filter(movie =>
         movie.title.toLowerCase().includes(searchBox.toLowerCase())
@@ -24,7 +24,7 @@ export const FavoritesPage = () => {
                 {filteredFavorites.length && <span>Found {filteredFavorites.length} records</span>}
             </div>
 
-            <MovieList hasSearched isLoading={isLoading} movies={filteredFavorites} />
+            <MovieList error={error} hasSearched isLoading={isLoading} movies={filteredFavorites} />
 
             <p>Pagination</p>
         </div>
