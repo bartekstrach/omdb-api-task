@@ -39,7 +39,7 @@ export const TitleInput = ({
                 />
                 {value && (
                     <button
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded cursor-pointer"
                         onClick={clear}
                         aria-label={`Clear ${label}`}
                     >
