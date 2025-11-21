@@ -2,8 +2,7 @@ import { useActionState, useEffect, useState, useTransition } from 'react';
 
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
-import { MovieList, Pagination, TypeDropdown, YearInput } from '../../components';
-import { TitleInput } from '../../components/title-input';
+import { MovieList, Pagination, TitleInput, TypeDropdown, YearInput } from '../../components';
 import { useMovieSearchParams } from '../../hooks';
 import omdbService from '../../services/omdb';
 import { MoviesSearchResult, MovieType } from '../../types';

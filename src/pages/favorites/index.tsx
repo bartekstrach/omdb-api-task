@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-import { MovieList } from '../../components';
-import { TitleInput } from '../../components/title-input';
+import { MovieList, TitleInput } from '../../components';
 import { useFavorites } from '../../hooks';
 
 export const FavoritesPage = () => {
