@@ -30,7 +30,7 @@ export const TitleInput = ({
             )}
             <div className="flex-1 relative">
                 <input
-                    aria-label='Title input'
+                    aria-label="Title input"
                     className="w-full border border-gray-700 p-2"
                     id="title-input"
                     type="text"

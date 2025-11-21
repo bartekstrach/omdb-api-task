@@ -6,7 +6,6 @@ import { describe, expect, it } from 'vitest';
 
 import { useMovieSearchParams } from './useMovieSearchParams';
 
-
 // Wrapper component that provides React Router context
 const createWrapper = (initialEntries: string[] = ['/']) => {
     const Wrapper = ({ children }: { children: ReactNode }) => (
