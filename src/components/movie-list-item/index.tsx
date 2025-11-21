@@ -31,12 +31,17 @@ export const MovieListItem = ({ movieInfo }: Props) => {
     }, [id, isFavorite]);
 
     const handleFavorite = async () => {
-        if (isFav) {
-            await removeFromFavorites(id);
-        } else {
-            await addToFavorites(movieInfo);
+        try {
+            if (isFav) {
+                await removeFromFavorites(id);
+                setIsFav(false);
+            } else {
+                await addToFavorites(movieInfo);
+                setIsFav(true);
+            }
+        } catch (error) {
+            console.error('Failed to update favorites:', error);
         }
-        setIsFav(!isFav);
     };
 
     return (
