@@ -11,6 +11,8 @@
 
         >
                 Q: 1 input czy więcej?
+                    A: kilka
+
                 Q: debouncer czy enter/przycisk?
                     A: enter - limit API
 
@@ -21,9 +23,10 @@
         - typie
 
             >
-                  Q: gdzie umieścić filtrowanie?
+                Q: gdzie umieścić filtrowanie?
+                    A: nad listą
 
-                  TIP: `type: movie | series | episode`
+                TIP: `type: movie | series | episode`
 
     - lista wyników wyszukiwania
         >
@@ -41,6 +44,7 @@
         >
                 Q: wyświetlić jako modal, side panel, osobna strona?
                     A: osobna strona
+
                 Q: jeżeli nie da się pobrać grafiki (płatne API) to co wstawić w zamian?
                     A: API zwraca link do małych grafik
 
@@ -50,10 +54,13 @@
         >
                 Q: gdzie przechowywać dane? local storage?
                     A: indexed db
+
                 Q: wyświetlić jako modal, side panel, osobna strona, widget?
                     A: osobna strona, taka jak strona główna
+
                 Q: przechowywać tylko ID czy wszystkie dane o filmie i wysyłać request żeby zaktualizować oceny?
                     A: przechowywanie całych elementów, ale bez ocen
+
                 Q: co robić przy usuwaniu z ulubionych?
                     A: usuwanie z indexed db
 
@@ -66,18 +73,25 @@
     - obsługiwać błędy z API
         >
                 Q: jakie błędy? jakie kody błędów?
+                    A: wyłapanie błędów + `res.Response = "False"
+
                 Q: strona z błędem
+                    A: komponent ze szczegółami
     - być responsywna
 
         >
                 Q: wybrać `@media (min-width)` dla mobilnych
+                    A: tailwind to obsługuje
 
                 I: mobile-first
 
     - spełniać podstawowe wymogi WCAG
         >
                 Q: która wersja?
+                    A: React Axe - WCAG 2.0 i 2.1, A & AA
+
                 Q: w jaki sposób zweryfikować?
+                    A: React Axe dla developmentu
 
     - być zoptymalizowana pod kątem SEO
         >
@@ -87,3 +101,4 @@
 - mile widziane testy jednostkowe
     >
             Q: tylko Vitest czy RTL również?
+                A: oba
