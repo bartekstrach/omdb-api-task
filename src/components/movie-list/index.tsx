@@ -13,15 +13,27 @@ interface Props {
 
 export const MovieList = ({ error, hasSearched, isLoading, movies }: Props) => {
     if (isLoading) {
-        return <LoadingSpinner />;
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <LoadingSpinner />
+            </div>
+        );
     }
 
     if (error) {
-        return <Message details={error} title="Oops, something went wrong!" />;
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <Message details={error} title="Oops, something went wrong!" />
+            </div>
+        );
     }
 
     if (!movies || movies.length === 0) {
-        return <EmptyState hasSearched={hasSearched} />;
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <EmptyState hasSearched={hasSearched} />
+            </div>
+        );
     }
 
     return (

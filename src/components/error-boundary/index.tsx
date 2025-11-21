@@ -28,10 +28,12 @@ export class ErrorBoundary extends Component<Props, State> {
     render() {
         if (this.state.hasError) {
             return (
-                <Message
-                    title="Something went wrong :("
-                    details="Please refresh the page and try again"
-                />
+                <div className="flex items-center justify-center min-h-[400px]">
+                    <Message
+                        title="Something went wrong :("
+                        details="Please refresh the page and try again"
+                    />
+                </div>
             );
         }
 

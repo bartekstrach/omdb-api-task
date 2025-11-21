@@ -72,19 +72,29 @@ export const MovieDetailsPage = () => {
     };
 
     if (isLoading) {
-        return <LoadingSpinner />;
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <LoadingSpinner />
+            </div>
+        );
     }
 
     if (movieDetails.error) {
-        return <Message details={movieDetails.error} title="Failed to get movie details" />;
+        return (
+            <div className="flex items-center justify-center min-h-[400px]">
+                <Message details={movieDetails.error} title="Failed to get movie details" />
+            </div>
+        );
     }
 
     if (!movieDetails.data) {
         return (
-            <Message
-                details="Go back to the home page and find a different one"
-                title="Movie not found"
-            />
+            <div className="flex items-center justify-center min-h-[400px]">
+                <Message
+                    details="Go back to the home page and find a different one"
+                    title="Movie not found"
+                />
+            </div>
         );
     }
 
