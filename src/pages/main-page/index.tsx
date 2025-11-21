@@ -22,7 +22,14 @@ export const MainPage = () => {
         { page: number; title: string; type: MovieType | undefined; year: string | undefined }
     >(async (_prev, { page, title, type, year }) => {
         if (!title || page < 1) {
-            return {};
+            return {
+                data: {
+                    currentPage: 1,
+                    items: [],
+                    pages: 0,
+                    totalResults: 0,
+                },
+            };
         }
 
         try {
@@ -41,7 +48,13 @@ export const MainPage = () => {
 
         startTransition(() => {
             if (!trimmed) {
-                updateParams({ q: '' });
+                updateParams({ q: '', page: 1, type: undefined, year: undefined });
+                runSearchAction({
+                    page: 1,
+                    title: '',
+                    type: undefined,
+                    year: undefined,
+                });
                 return;
             }
 
@@ -117,12 +130,12 @@ export const MainPage = () => {
                 </div>
 
                 {searchMovieResponse.data?.totalResults &&
-                    searchMovieResponse.data.totalResults > 0 && (
-                        <span>
-                            Found {searchMovieResponse.data.totalResults}{' '}
-                            {searchMovieResponse.data.totalResults === 1 ? 'record' : 'records'}
-                        </span>
-                    )}
+                searchMovieResponse.data.totalResults > 0 ? (
+                    <span>
+                        Found {searchMovieResponse.data.totalResults}{' '}
+                        {searchMovieResponse.data.totalResults === 1 ? 'record' : 'records'}
+                    </span>
+                ) : null}
             </div>
 
             <MovieList
@@ -132,15 +145,15 @@ export const MainPage = () => {
                 movies={searchMovieResponse.data?.items || []}
             />
 
-            {searchMovieResponse.data?.totalResults &&
-                searchMovieResponse.data?.totalResults > 0 &&
-                !isLoading && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={searchMovieResponse.data.pages || 1}
-                        onPageChange={handlePageChange}
-                    />
-                )}
+            {searchMovieResponse.data?.totalResults && searchMovieResponse.data?.totalResults > 0
+                ? !isLoading && (
+                      <Pagination
+                          currentPage={currentPage}
+                          totalPages={searchMovieResponse.data.pages || 1}
+                          onPageChange={handlePageChange}
+                      />
+                  )
+                : null}
         </div>
     );
 };
