@@ -47,12 +47,13 @@ export const MainPage = () => {
 
             updateParams({
                 q: trimmed,
+                page: 1,
                 type: selectedType,
                 year: selectedYear,
             });
 
             runSearchAction({
-                page: currentPage,
+                page: 1,
                 title: trimmed,
                 type: selectedType,
                 year: selectedYear,
