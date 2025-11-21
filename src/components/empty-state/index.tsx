@@ -6,7 +6,7 @@ interface Props {
 
 export const EmptyState = ({ hasSearched }: Props) => {
     if (hasSearched) {
-        <Message details="Try a different one!" title="No results found" />;
+        return <Message details="Try a different one!" title="No results found" />;
     }
 
     return (
