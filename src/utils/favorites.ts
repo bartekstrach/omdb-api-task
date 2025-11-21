@@ -30,7 +30,7 @@ export const addToFavorites = async (movie: MovieShortInfo): Promise<void> => {
 
         const transaction = db.transaction(FAVORITES_STORE_NAME, 'readwrite');
         const store = transaction.objectStore(FAVORITES_STORE_NAME);
-        
+
         return new Promise((resolve, reject) => {
             const request = store.add(movie);
 
@@ -38,9 +38,7 @@ export const addToFavorites = async (movie: MovieShortInfo): Promise<void> => {
             request.onerror = (event: Event) => reject((event.target as IDBRequest).error);
         });
     } catch (error) {
-        const message = error instanceof Error 
-            ? error.message 
-            : 'Failed to add to favorites';
+        const message = error instanceof Error ? error.message : 'Failed to add to favorites';
 
         throw new Error(message);
     }
@@ -52,7 +50,7 @@ export const removeFromFavorites = async (id: string): Promise<void> => {
 
         const transaction = db.transaction(FAVORITES_STORE_NAME, 'readwrite');
         const store = transaction.objectStore(FAVORITES_STORE_NAME);
-        
+
         return new Promise((resolve, reject) => {
             const request = store.delete(id);
 
@@ -60,9 +58,7 @@ export const removeFromFavorites = async (id: string): Promise<void> => {
             request.onerror = (event: Event) => reject((event.target as IDBRequest).error);
         });
     } catch (error) {
-        const message = error instanceof Error 
-            ? error.message 
-            : 'Failed to remove from favorites';
+        const message = error instanceof Error ? error.message : 'Failed to remove from favorites';
 
         throw new Error(message);
     }
@@ -70,13 +66,13 @@ export const removeFromFavorites = async (id: string): Promise<void> => {
 
 export const isFavorite = async (id: string): Promise<boolean> => {
     const db = await openDB();
-    
+
     const transaction = db.transaction(FAVORITES_STORE_NAME, 'readonly');
     const store = transaction.objectStore(FAVORITES_STORE_NAME);
-    
+
     return new Promise((resolve, reject) => {
         const request = store.get(id);
-        
+
         request.onsuccess = () => resolve(request.result !== undefined);
         request.onerror = (event: Event) => reject((event.target as IDBRequest).error);
     });
@@ -88,7 +84,7 @@ export const getFavorites = async (): Promise<MovieShortInfo[]> => {
 
         const transaction = db.transaction(FAVORITES_STORE_NAME, 'readonly');
         const store = transaction.objectStore(FAVORITES_STORE_NAME);
-        
+
         return new Promise((resolve, reject) => {
             const request = store.getAll();
 
@@ -96,10 +92,8 @@ export const getFavorites = async (): Promise<MovieShortInfo[]> => {
             request.onerror = (event: Event) => reject((event.target as IDBRequest).error);
         });
     } catch (error) {
-        const message = error instanceof Error 
-            ? error.message 
-            : 'Failed to load favorites';
-            
+        const message = error instanceof Error ? error.message : 'Failed to load favorites';
+
         throw new Error(message);
     }
 };

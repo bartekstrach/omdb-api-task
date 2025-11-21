@@ -17,19 +17,17 @@ export const MovieDetailsPage = () => {
     const [isTransitioning, startTransition] = useTransition();
 
     const [movieDetails, fetchMovieDetails, isFetching] = useActionState<
-        { data?: MovieDetailedInfo, error?: string },
+        { data?: MovieDetailedInfo; error?: string },
         string
     >(async (_prev, movieId) => {
         try {
-            const data = await omdbService.getMovieDetails({ 
-                i: movieId, 
-                plot: 'full' 
+            const data = await omdbService.getMovieDetails({
+                i: movieId,
+                plot: 'full',
             });
             return { data };
         } catch (error) {
-            const message = error instanceof Error 
-                ? error.message 
-                : 'An unexpected error occurred';
+            const message = error instanceof Error ? error.message : 'An unexpected error occurred';
             return { error: message };
         }
     }, {});
@@ -84,12 +82,7 @@ export const MovieDetailsPage = () => {
     }
 
     if (movieDetails.error) {
-        return (
-            <Message
-                details={movieDetails.error}
-                title="Failed to get movie details"
-            />
-        );
+        return <Message details={movieDetails.error} title="Failed to get movie details" />;
     }
 
     if (!movieDetails.data) {

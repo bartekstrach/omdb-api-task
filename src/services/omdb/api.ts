@@ -23,7 +23,7 @@ export const fetchMovies = async (
         }
 
         const data = await res.json();
-        
+
         // Handle OMDB API errors (Response: "False")
         if (data.Response === 'False') {
             throw new Error(data.Error || 'No movies found');
@@ -52,7 +52,7 @@ export const fetchMovieDetails = async (
         }
 
         const data = await res.json();
-        
+
         // Handle OMDB API errors (Response: "False")
         if (data.Response === 'False') {
             throw new Error(data.Error || 'Movie not found');

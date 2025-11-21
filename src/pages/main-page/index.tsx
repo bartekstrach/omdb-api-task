@@ -19,7 +19,7 @@ export const MainPage = () => {
     const [isTransitioning, startTransition] = useTransition();
 
     const [searchMovieResponse, runSearchAction, isSearching] = useActionState<
-        { data?: MoviesSearchResult, error?: string },
+        { data?: MoviesSearchResult; error?: string },
         { page: number; title: string; type: MovieType | undefined; year: string | undefined }
     >(async (_prev, { page, title, type, year }) => {
         if (!title || page < 1) {
@@ -30,9 +30,7 @@ export const MainPage = () => {
             const data = await omdbService.getMovies({ s: title, page, type, y: year });
             return { data };
         } catch (error) {
-            const message = error instanceof Error 
-                ? error.message 
-                : 'An unexpected error occurred';
+            const message = error instanceof Error ? error.message : 'An unexpected error occurred';
             return { error: message };
         }
     }, {});

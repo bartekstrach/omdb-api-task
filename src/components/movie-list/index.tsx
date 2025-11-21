@@ -15,12 +15,9 @@ export const MovieList = ({ error, hasSearched, isLoading, movies }: Props) => {
     if (isLoading) {
         return <LoadingSpinner />;
     }
-    
+
     if (error) {
-        return <Message
-            details={error}
-            title="Oops, something went wrong!"
-        />;
+        return <Message details={error} title="Oops, something went wrong!" />;
     }
 
     if (!movies || movies.length === 0) {
