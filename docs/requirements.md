@@ -96,7 +96,9 @@
     - być zoptymalizowana pod kątem SEO
         >
                 Q: poczytać o web vitals i w jaki sposób można poprawić SEO
+                    A: podstawowe meta tagi
                 Q: robots.txt?
+                    A: dodane
 
 - mile widziane testy jednostkowe
     >
