@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 
 import { useFavorites } from '../../hooks';
 import { MovieShortInfo } from '../../types';
+import { MoviePoster } from '../movie-poster';
 import { Pill } from '../pill';
 
 interface Props {
@@ -42,7 +43,7 @@ export const MovieListItem = ({ movieInfo }: Props) => {
     };
 
     return (
-        <div className="grid grid-cols-[auto_90px_1fr_auto_auto_auto] border border-gray-700 min-h-[100px] items-center hover:bg-gray-100 space-x-4">
+        <div className="grid grid-cols-[auto_80px_1fr_auto_auto_auto] border border-gray-700 min-h-[90px] items-center hover:bg-gray-100 space-x-4">
             <button
                 className="ml-4 hover:bg-gray-100 rounded transition-colors cursor-pointer"
                 aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
@@ -55,7 +56,7 @@ export const MovieListItem = ({ movieInfo }: Props) => {
                 )}
             </button>
 
-            <img alt={`${title} poster`} className="max-h-[100px]" src={poster} />
+            <MoviePoster alt={`${title} poster`} height={90} src={poster} width={60} />
 
             <div className="min-w-0 flex flex-col">
                 <h3 className="font-semibold truncate">{title}</h3>

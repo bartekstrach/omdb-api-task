@@ -7,7 +7,7 @@ import omdbService from '../../services/omdb';
 import { MovieDetailedInfo } from '../../types';
 import { MovieDetailsContent } from './components/content';
 import { MovieDetailsHeader } from './components/header';
-import { LoadingSpinner, Message } from '../../components';
+import { LoadingSpinner, Message, MoviePoster } from '../../components';
 import { mapMovieDetailedInfoToMovieShortInfo } from '../../utils/mappers';
 
 export const MovieDetailsPage = () => {
@@ -100,10 +100,11 @@ export const MovieDetailsPage = () => {
 
     return (
         <div className="flex flex-col md:flex-row p-4 md:p-6">
-            <img
+            <MoviePoster
                 alt={`${movieDetails.data.title} poster`}
-                className="w-full md:w-80 h-auto h-fit"
+                height={450}
                 src={movieDetails.data.poster}
+                width={300}
             />
 
             <div className="flex flex-col flex-1">
