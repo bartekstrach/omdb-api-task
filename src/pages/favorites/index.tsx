@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { MovieList, TitleInput } from '../../components';
 import { useFavorites } from '../../hooks';
@@ -7,8 +7,10 @@ export const FavoritesPage = () => {
     const [searchBox, setSearchBox] = useState<string>('');
     const { error, favorites, isLoading } = useFavorites();
 
-    const filteredFavorites = favorites.filter(movie =>
-        movie.title.toLowerCase().includes(searchBox.toLowerCase())
+    const filteredFavorites = useMemo(
+        () =>
+            favorites.filter(movie => movie.title.toLowerCase().includes(searchBox.toLowerCase())),
+        [favorites, searchBox]
     );
 
     return (
@@ -20,7 +22,9 @@ export const FavoritesPage = () => {
                     value={searchBox}
                 />
 
-                {filteredFavorites.length && <span>Found {filteredFavorites.length} records</span>}
+                {filteredFavorites.length > 0 && (
+                    <span>Found {filteredFavorites.length} records</span>
+                )}
             </div>
 
             <MovieList error={error} hasSearched isLoading={isLoading} movies={filteredFavorites} />

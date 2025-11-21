@@ -25,7 +25,7 @@ export const MovieListItem = ({ movieInfo }: Props) => {
         };
 
         fetchFavoriteStatus();
-    }, [id, isFavorite]);
+    }, [id]);
 
     const handleFavorite = async () => {
         try {
