@@ -1,6 +1,8 @@
 import { HeartIcon as HeartIconOutlined, StarIcon } from '@heroicons/react/24/outline';
 import { HeartIcon } from '@heroicons/react/24/solid';
 
+import { Pill } from '../../../components';
+
 interface Props {
     title: string;
     year: string;
@@ -43,7 +45,7 @@ export const MovieDetailsHeader = ({
 
             <div className="flex items-center gap-4 flex-wrap">
                 <span>{runtime}</span>
-                <span className="border border-gray-700 rounded-xl p-1">{type}</span>
+                <Pill text={type} />
             </div>
         </div>
 
