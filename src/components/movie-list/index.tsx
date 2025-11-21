@@ -12,15 +12,15 @@ interface Props {
 }
 
 export const MovieList = ({ error, hasSearched, isLoading, movies }: Props) => {
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
+    
     if (error) {
         return <Message
             details={error}
             title="Oops, something went wrong!"
         />;
-    }
-
-    if (isLoading) {
-        return <LoadingSpinner />;
     }
 
     if (!movies || movies.length === 0) {
