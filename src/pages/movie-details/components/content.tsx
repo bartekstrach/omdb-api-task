@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const MovieDetailsContent = ({ genre, actors, director, writer, plot }: Props) => (
-    <div className="flex flex-col p-8 gap-8">
+    <div className="flex flex-col p-2 sm:p-4 md:p-8 gap-4 md:gap-8">
         <div>
             <h3 className="text-xl font-bold underline">Genre</h3>
             <span>{genre}</span>
@@ -15,7 +15,7 @@ export const MovieDetailsContent = ({ genre, actors, director, writer, plot }: P
 
         <div>
             <h3 className="text-xl font-bold underline">Cast</h3>
-            <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2">
+            <dl className="grid sm:grid-cols-[auto_1fr] gap-x-4 gap-y-2">
                 <dt className="font-semibold">Actors</dt>
                 <dd>{actors}</dd>
                 <dt className="font-semibold">Director</dt>

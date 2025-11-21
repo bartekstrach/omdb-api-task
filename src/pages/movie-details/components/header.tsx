@@ -24,22 +24,9 @@ export const MovieDetailsHeader = ({
     isFavorite,
     onToggleFavorite,
 }: Props) => (
-    <div className="flex justify-between bg-gradient-to-br from-white to-gray-200 p-8">
+    <div className="flex flex-col sm:flex-row justify-between bg-gradient-to-br from-white to-gray-200 gap-4 p-2 sm:p-4 md:p-8">
         <div className="flex flex-col">
-            <div className="flex gap-x-4">
-                <h2 className="text-3xl font-bold">{title}</h2>
-                <button
-                    className="rounded transition-colors cursor-pointer"
-                    aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                    onClick={onToggleFavorite}
-                >
-                    {isFavorite ? (
-                        <HeartIcon className="h-6 w-6 text-gray-900" />
-                    ) : (
-                        <HeartIconOutlined className="hover:fill-current h-6 w-6 text-gray-900" />
-                    )}
-                </button>
-            </div>
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">{title}</h2>
 
             <span>{year}</span>
 
@@ -49,10 +36,23 @@ export const MovieDetailsHeader = ({
             </div>
         </div>
 
-        <div className="flex gap-1">
-            <StarIcon className="h-6 w-6 text-gray-900" />
-            <span className="font-semibold">{rating}</span>
-            <span>{`(${votes})`}</span>
+        <div className="flex items-start gap-x-4">
+            <div className="flex gap-1">
+                <StarIcon className="h-6 w-6 text-gray-900" />
+                <span className="font-semibold">{rating}</span>
+                <span>{`(${votes})`}</span>
+            </div>
+            <button
+                className="rounded transition-colors cursor-pointer"
+                aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+                onClick={onToggleFavorite}
+            >
+                {isFavorite ? (
+                    <HeartIcon className="h-6 w-6 text-gray-900" />
+                ) : (
+                    <HeartIconOutlined className="hover:fill-current h-6 w-6 text-gray-900" />
+                )}
+            </button>
         </div>
     </div>
 );

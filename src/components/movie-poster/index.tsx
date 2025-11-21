@@ -24,7 +24,7 @@ export const MoviePoster = ({ alt, height, src, width }: Props) => {
             ) : (
                 <img
                     alt={alt}
-                    className={`object-cover w-full h-full`}
+                    className={`object-cover w-full h-full md:w-80`}
                     loading="lazy"
                     onError={handleError}
                     src={src}
