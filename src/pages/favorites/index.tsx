@@ -41,7 +41,7 @@ export const FavoritesPage = () => {
 
     return (
         <div className="flex flex-col space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-y-2">
                 <TitleInput
                     onChange={handleSearchChange}
                     placeholder="Filter by title..."
@@ -49,7 +49,7 @@ export const FavoritesPage = () => {
                 />
 
                 {filteredFavorites.length > 0 && (
-                    <span>
+                    <span className="truncate text-sm md:text-base">
                         Found {filteredFavorites.length}{' '}
                         {filteredFavorites.length === 1 ? 'record' : 'records'}
                     </span>
