@@ -19,15 +19,23 @@ export const MainPage = () => {
     const [isTransitioning, startTransition] = useTransition();
 
     const [searchMovieResponse, runSearchAction, isSearching] = useActionState<
-        MoviesSearchResult | undefined,
+        { data?: MoviesSearchResult, error?: string },
         { page: number; title: string; type: MovieType | undefined; year: string | undefined }
     >(async (_prev, { page, title, type, year }) => {
         if (!title || page < 1) {
-            return undefined;
+            return {};
         }
 
-        return await omdbService.getMovies({ s: title, page, type, y: year });
-    }, undefined);
+        try {
+            const data = await omdbService.getMovies({ s: title, page, type, y: year });
+            return { data };
+        } catch (error) {
+            const message = error instanceof Error 
+                ? error.message 
+                : 'An unexpected error occurred';
+            return { error: message };
+        }
+    }, {});
 
     const isLoading = isSearching || isTransitioning;
 
@@ -110,21 +118,22 @@ export const MainPage = () => {
                     </button>
                 </div>
 
-                {searchMovieResponse?.totalResults && (
-                    <span>Found {searchMovieResponse.totalResults} records</span>
+                {searchMovieResponse.data?.totalResults && (
+                    <span>Found {searchMovieResponse.data.totalResults} records</span>
                 )}
             </div>
 
             <MovieList
+                error={searchMovieResponse.error}
                 hasSearched={!!q.trim()}
                 isLoading={isLoading}
-                movies={searchMovieResponse?.items || []}
+                movies={searchMovieResponse.data?.items || []}
             />
 
-            {searchMovieResponse?.totalResults && !isLoading && (
+            {searchMovieResponse.data?.totalResults && !isLoading && (
                 <Pagination
                     currentPage={currentPage}
-                    totalPages={searchMovieResponse.pages || 1}
+                    totalPages={searchMovieResponse.data.pages || 1}
                     onPageChange={handlePageChange}
                 />
             )}
