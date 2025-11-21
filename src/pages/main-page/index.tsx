@@ -101,11 +101,13 @@ export const MainPage = () => {
 
     useEffect(() => {
         if (!q) {
-            runSearchAction({
-                page: 1,
-                title: '',
-                type: undefined,
-                year: undefined,
+            startTransition(() => {
+                runSearchAction({
+                    page: 1,
+                    title: '',
+                    type: undefined,
+                    year: undefined,
+                });
             });
         }
     }, [q]);
