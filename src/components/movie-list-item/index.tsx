@@ -63,7 +63,7 @@ export const MovieListItem = ({ movieInfo }: Props) => {
             </div>
 
             <div className="min-w-0 flex flex-col text-sm md:text-base">
-                <h3 className="font-semibold truncate">{title}</h3>
+                <h2 className="font-semibold truncate">{title}</h2>
                 <span>{year}</span>
             </div>
 
