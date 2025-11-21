@@ -17,11 +17,22 @@ export const MovieDetailsPage = () => {
     const [isTransitioning, startTransition] = useTransition();
 
     const [movieDetails, fetchMovieDetails, isFetching] = useActionState<
-        MovieDetailedInfo | undefined,
+        { data?: MovieDetailedInfo, error?: string },
         string
     >(async (_prev, movieId) => {
-        return await omdbService.getMovieDetails({ i: movieId, plot: 'full' });
-    }, undefined);
+        try {
+            const data = await omdbService.getMovieDetails({ 
+                i: movieId, 
+                plot: 'full' 
+            });
+            return { data };
+        } catch (error) {
+            const message = error instanceof Error 
+                ? error.message 
+                : 'An unexpected error occurred';
+            return { error: message };
+        }
+    }, {});
 
     const isLoading = isFetching || isTransitioning;
 
@@ -31,8 +42,12 @@ export const MovieDetailsPage = () => {
 
             fetchMovieDetails(id);
 
-            const favoriteStatus = await isFavorite(id);
-            setIsFav(favoriteStatus);
+            try {
+                const favoriteStatus = await isFavorite(id);
+                setIsFav(favoriteStatus);
+            } catch (error) {
+                console.error('Failed to check favorite status:', error);
+            }
         };
 
         startTransition(() => {
@@ -41,31 +56,43 @@ export const MovieDetailsPage = () => {
     }, [id]);
 
     const handleFavorite = async () => {
-        if (!id || !movieDetails) {
+        if (!id || !movieDetails.data) {
             return;
         }
 
-        if (isFav) {
-            await removeFromFavorites(id);
-        } else {
-            // TODO mapper?
-            await addToFavorites({
-                id: movieDetails.id,
-                poster: movieDetails.poster,
-                title: movieDetails.title,
-                type: movieDetails.type,
-                year: movieDetails.year,
-            });
+        try {
+            if (isFav) {
+                await removeFromFavorites(id);
+            } else {
+                // TODO mapper?
+                await addToFavorites({
+                    id: movieDetails.data.id,
+                    poster: movieDetails.data.poster,
+                    title: movieDetails.data.title,
+                    type: movieDetails.data.type,
+                    year: movieDetails.data.year,
+                });
+            }
+            setIsFav(!isFav);
+        } catch (error) {
+            console.error('Failed to update favorites:', error);
         }
-
-        setIsFav(!isFav);
     };
 
     if (isLoading) {
         return <LoadingSpinner />;
     }
 
-    if (!movieDetails) {
+    if (movieDetails.error) {
+        return (
+            <Message
+                details={movieDetails.error}
+                title="Failed to get movie details"
+            />
+        );
+    }
+
+    if (!movieDetails.data) {
         return (
             <Message
                 details="Go back to the home page and find a different one"
@@ -77,29 +104,29 @@ export const MovieDetailsPage = () => {
     return (
         <div className="flex flex-col md:flex-row p-4 md:p-6">
             <img
-                alt={`${movieDetails.title} poster`}
+                alt={`${movieDetails.data.title} poster`}
                 className="w-full md:w-80 h-auto h-fit"
-                src={movieDetails.poster}
+                src={movieDetails.data.poster}
             />
 
             <div className="flex flex-col flex-1">
                 <MovieDetailsHeader
                     isFavorite={isFav}
                     onToggleFavorite={handleFavorite}
-                    rating={movieDetails.rating}
-                    runtime={movieDetails.runtime}
-                    title={movieDetails.title}
-                    type={movieDetails.type}
-                    votes={movieDetails.votes}
-                    year={movieDetails.year}
+                    rating={movieDetails.data.rating}
+                    runtime={movieDetails.data.runtime}
+                    title={movieDetails.data.title}
+                    type={movieDetails.data.type}
+                    votes={movieDetails.data.votes}
+                    year={movieDetails.data.year}
                 />
 
                 <MovieDetailsContent
-                    actors={movieDetails.actors}
-                    director={movieDetails.director}
-                    genre={movieDetails.genre}
-                    plot={movieDetails.plot}
-                    writer={movieDetails.writer}
+                    actors={movieDetails.data.actors}
+                    director={movieDetails.data.director}
+                    genre={movieDetails.data.genre}
+                    plot={movieDetails.data.plot}
+                    writer={movieDetails.data.writer}
                 />
             </div>
         </div>
