@@ -1,5 +1,8 @@
 node_modules
 
+# Tests
+coverage
+
 # Secrets
 .env
 .env.local
