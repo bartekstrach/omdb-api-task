@@ -43,32 +43,38 @@ export const MovieListItem = ({ movieInfo }: Props) => {
     };
 
     return (
-        <div className="grid grid-cols-[auto_80px_1fr_auto_auto_auto] border border-gray-700 min-h-[90px] items-center hover:bg-gray-100 space-x-4">
-            <button
-                className="ml-4 hover:bg-gray-100 rounded transition-colors cursor-pointer"
-                aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
-                onClick={handleFavorite}
-            >
-                {isFav ? (
-                    <HeartIcon className="h-6 w-6 text-gray-900" />
-                ) : (
-                    <HeartIconOutlined className="hover:fill-current h-6 w-6 text-gray-900" />
-                )}
-            </button>
+        <div className="grid grid-cols-[1fr_auto] sm:grid-cols-[auto_1fr_auto_auto] md:grid-cols-[auto_80px_1fr_auto_auto] border border-gray-700 min-h-[90px] items-center hover:bg-gray-100 px-4 gap-4">
+            <div className="hidden sm:flex">
+                <button
+                    className="hover:bg-gray-100 rounded transition-colors cursor-pointer"
+                    aria-label={isFav ? 'Remove from favorites' : 'Add to favorites'}
+                    onClick={handleFavorite}
+                >
+                    {isFav ? (
+                        <HeartIcon className="h-6 w-6 text-gray-900" />
+                    ) : (
+                        <HeartIconOutlined className="hover:fill-current h-6 w-6 text-gray-900" />
+                    )}
+                </button>
+            </div>
 
-            <MoviePoster alt={`${title} poster`} height={90} src={poster} width={60} />
+            <div className="hidden md:inline">
+                <MoviePoster alt={`${title} poster`} height={90} src={poster} width={60} />
+            </div>
 
-            <div className="min-w-0 flex flex-col">
+            <div className="min-w-0 flex flex-col text-sm md:text-base">
                 <h3 className="font-semibold truncate">{title}</h3>
                 <span>{year}</span>
             </div>
 
-            <Pill text={type} />
+            <div className="hidden sm:inline">
+                <Pill text={type} />
+            </div>
 
             <Link to={`/movie/${id}`} className="flex items-center">
                 <button
                     aria-label="More info"
-                    className="mr-4 hover:bg-gray-100 rounded transition-colors cursor-pointer"
+                    className="hover:bg-gray-100 rounded transition-colors cursor-pointer"
                 >
                     <InformationCircleIcon className="h-6 w-6 text-gray-900" />
                 </button>
