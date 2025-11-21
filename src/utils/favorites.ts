@@ -24,74 +24,82 @@ const openDB = (): Promise<IDBDatabase> => {
     });
 };
 
-export const addToFavorites = (movie: MovieShortInfo): Promise<void> => {
-    return new Promise((resolve, reject) => {
-        openDB().then(db => {
-            const transaction = db.transaction(FAVORITES_STORE_NAME, 'readwrite');
-            const store = transaction.objectStore(FAVORITES_STORE_NAME);
+export const addToFavorites = async (movie: MovieShortInfo): Promise<void> => {
+    try {
+        const db = await openDB();
+
+        const transaction = db.transaction(FAVORITES_STORE_NAME, 'readwrite');
+        const store = transaction.objectStore(FAVORITES_STORE_NAME);
+        
+        return new Promise((resolve, reject) => {
             const request = store.add(movie);
 
-            request.onsuccess = () => {
-                resolve();
-            };
-
-            request.onerror = (event: Event) => {
-                reject((event.target as IDBRequest).error);
-            };
+            request.onsuccess = () => resolve();
+            request.onerror = (event: Event) => reject((event.target as IDBRequest).error);
         });
-    });
+    } catch (error) {
+        const message = error instanceof Error 
+            ? error.message 
+            : 'Failed to add to favorites';
+
+        throw new Error(message);
+    }
 };
 
-export const removeFromFavorites = (id: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-        openDB().then(db => {
-            const transaction = db.transaction(FAVORITES_STORE_NAME, 'readwrite');
-            const store = transaction.objectStore(FAVORITES_STORE_NAME);
+export const removeFromFavorites = async (id: string): Promise<void> => {
+    try {
+        const db = await openDB();
+
+        const transaction = db.transaction(FAVORITES_STORE_NAME, 'readwrite');
+        const store = transaction.objectStore(FAVORITES_STORE_NAME);
+        
+        return new Promise((resolve, reject) => {
             const request = store.delete(id);
 
-            request.onsuccess = () => {
-                resolve();
-            };
-
-            request.onerror = (event: Event) => {
-                reject((event.target as IDBRequest).error);
-            };
+            request.onsuccess = () => resolve();
+            request.onerror = (event: Event) => reject((event.target as IDBRequest).error);
         });
+    } catch (error) {
+        const message = error instanceof Error 
+            ? error.message 
+            : 'Failed to remove from favorites';
+
+        throw new Error(message);
+    }
+};
+
+export const isFavorite = async (id: string): Promise<boolean> => {
+    const db = await openDB();
+    
+    const transaction = db.transaction(FAVORITES_STORE_NAME, 'readonly');
+    const store = transaction.objectStore(FAVORITES_STORE_NAME);
+    
+    return new Promise((resolve, reject) => {
+        const request = store.get(id);
+        
+        request.onsuccess = () => resolve(request.result !== undefined);
+        request.onerror = (event: Event) => reject((event.target as IDBRequest).error);
     });
 };
 
-export const isFavorite = (id: string): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-        openDB().then(db => {
-            const transaction = db.transaction(FAVORITES_STORE_NAME, 'readonly');
-            const store = transaction.objectStore(FAVORITES_STORE_NAME);
-            const request = store.get(id);
+export const getFavorites = async (): Promise<MovieShortInfo[]> => {
+    try {
+        const db = await openDB();
 
-            request.onsuccess = () => {
-                resolve(request.result !== undefined);
-            };
-
-            request.onerror = (event: Event) => {
-                reject((event.target as IDBRequest).error);
-            };
-        });
-    });
-};
-
-export const getFavorites = (): Promise<MovieShortInfo[]> => {
-    return new Promise((resolve, reject) => {
-        openDB().then(db => {
-            const transaction = db.transaction(FAVORITES_STORE_NAME, 'readonly');
-            const store = transaction.objectStore(FAVORITES_STORE_NAME);
+        const transaction = db.transaction(FAVORITES_STORE_NAME, 'readonly');
+        const store = transaction.objectStore(FAVORITES_STORE_NAME);
+        
+        return new Promise((resolve, reject) => {
             const request = store.getAll();
 
-            request.onsuccess = () => {
-                resolve(request.result);
-            };
-
-            request.onerror = (event: Event) => {
-                reject((event.target as IDBRequest).error);
-            };
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = (event: Event) => reject((event.target as IDBRequest).error);
         });
-    });
+    } catch (error) {
+        const message = error instanceof Error 
+            ? error.message 
+            : 'Failed to load favorites';
+            
+        throw new Error(message);
+    }
 };

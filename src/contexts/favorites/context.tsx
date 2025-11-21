@@ -3,11 +3,12 @@ import { createContext } from 'react';
 import { MovieShortInfo } from '../../types';
 
 type FavoritesContextType = {
+    addToFavorites: (movie: MovieShortInfo) => Promise<void>;
+    error?: string;
     favorites: MovieShortInfo[];
-    isLoading: boolean;
-    addToFavorites: (movie: MovieShortInfo) => void;
     isFavorite: (id: string) => Promise<boolean>;
-    removeFromFavorites: (id: string) => void;
+    isLoading: boolean;
+    removeFromFavorites: (id: string) => Promise<void>;
 };
 
 export const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);

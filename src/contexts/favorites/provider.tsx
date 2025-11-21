@@ -5,44 +5,68 @@ import { MovieShortInfo } from '../../types';
 import * as utils from '../../utils/favorites';
 
 interface FavoritesProviderProps {
-    children: React.ReactNode; // This is the key change
+    children: React.ReactNode;
 }
 
-// Provider component
 export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
     const [favorites, setFavorites] = useState<MovieShortInfo[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | undefined>(undefined);
 
-    // Fetch the list of favorites from IndexedDB
     useEffect(() => {
         const fetchFavorites = async () => {
             setIsLoading(true);
-            const data = await utils.getFavorites(); // Get favorites from IndexedDB
-            setFavorites(data);
-            setIsLoading(false);
+            setError(undefined);
+
+            try {
+                const data = await utils.getFavorites();
+                setFavorites(data);
+            } catch (error) {
+                const message = error instanceof Error ? error.message : 'Failed to load favorites';
+                setError(message);
+                console.error('Failed to fetch favorites:', error);
+            } finally {
+                setIsLoading(false);
+            }
         };
+
         fetchFavorites();
     }, []);
 
-    // Add a movie to favorites
     const addToFavorites = async (movie: MovieShortInfo) => {
-        await utils.addToFavorites(movie); // Add to IndexedDB
-        setFavorites(prev => [...prev, movie]); // Update state
+        try {
+            await utils.addToFavorites(movie);
+            setFavorites(prev => [...prev, movie]);
+            setError(undefined);
+        } catch (error) {
+            setError((error as Error).message);
+            throw error;
+        }
     };
 
     const isFavorite = async (id: string) => {
-        return await utils.isFavorite(id);
+        try {
+            return await utils.isFavorite(id);
+        } catch (error) {
+            console.error('Failed to check favorite status', error);
+            return false;
+        }
     };
 
-    // Remove a movie from favorites
     const removeFromFavorites = async (id: string) => {
-        await utils.removeFromFavorites(id); // Remove from IndexedDB
-        setFavorites(prev => prev.filter(movie => movie.id !== id)); // Update state
+        try {
+            await utils.removeFromFavorites(id);
+            setFavorites(prev => prev.filter(movie => movie.id !== id));
+            setError(undefined);
+        } catch (error) {
+            setError((error as Error).message);
+            throw error;
+        }
     };
 
     return (
         <FavoritesContext.Provider
-            value={{ favorites, isLoading, addToFavorites, isFavorite, removeFromFavorites }}
+            value={{ addToFavorites, error, favorites, isFavorite, isLoading, removeFromFavorites }}
         >
             {children}
         </FavoritesContext.Provider>
