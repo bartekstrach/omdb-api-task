@@ -99,7 +99,7 @@ export const MovieDetailsPage = () => {
     }
 
     return (
-        <div className="flex flex-col md:flex-row p-4 md:p-6">
+        <div className="flex flex-col md:flex-row">
             <MoviePoster
                 alt={`${movieDetails.data.title} poster`}
                 height={450}
