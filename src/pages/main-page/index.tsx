@@ -99,6 +99,17 @@ export const MainPage = () => {
         });
     }, []);
 
+    useEffect(() => {
+        if (!q) {
+            runSearchAction({
+                page: 1,
+                title: '',
+                type: undefined,
+                year: undefined,
+            });
+        }
+    }, [q]);
+
     return (
         <div className="flex flex-col space-y-4">
             <div className="flex items-center justify-between">
