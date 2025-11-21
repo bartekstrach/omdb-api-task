@@ -15,13 +15,28 @@ export const fetchMovies = async (
 ): Promise<SearchMoviesResponse> => {
     const queryParams = queryBuilder(params);
 
-    const res = await fetch(`${BASE_URL}&${queryParams}`);
+    try {
+        const res = await fetch(`${BASE_URL}&${queryParams}`);
 
-    if (!res.ok) {
-        throw new Error('Failed to fetch movies');
+        if (!res.ok) {
+            throw new Error(`Failed to fetch movies: ${res.statusText}`);
+        }
+
+        const data = await res.json();
+        
+        // Handle OMDB API errors (Response: "False")
+        if (data.Response === 'False') {
+            throw new Error(data.Error || 'No movies found');
+        }
+
+        return data;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        }
+
+        throw new Error('Network error. Please check your connection.');
     }
-
-    return res.json();
 };
 
 export const fetchMovieDetails = async (
@@ -29,11 +44,26 @@ export const fetchMovieDetails = async (
 ): Promise<MovieDetailsResponse> => {
     const queryParams = queryBuilder(params);
 
-    const res = await fetch(`${BASE_URL}&${queryParams}`);
+    try {
+        const res = await fetch(`${BASE_URL}&${queryParams}`);
 
-    if (!res.ok) {
-        throw new Error('Failed to fetch movie details');
+        if (!res.ok) {
+            throw new Error(`Failed to fetch movie details: ${res.statusText}`);
+        }
+
+        const data = await res.json();
+        
+        // Handle OMDB API errors (Response: "False")
+        if (data.Response === 'False') {
+            throw new Error(data.Error || 'Movie not found');
+        }
+
+        return data;
+    } catch (error) {
+        if (error instanceof Error) {
+            throw error;
+        }
+
+        throw new Error('Network error. Please check your connection.');
     }
-
-    return res.json();
 };

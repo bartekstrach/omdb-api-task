@@ -14,11 +14,6 @@ export const processMovies = ({
     params: SearchMoviesRequestParams;
     response: SearchMoviesResponse;
 }): MoviesSearchResult => {
-    if (response.Response === 'False') {
-        throw new Error('Failed to process movies');
-        // return null; // TODO: how to handle it?
-    }
-
     const currentPage = params.page ?? 1;
     const items = response.Search.map(mapResponseToMovieShortInfo);
     const totalResults = Number(response.totalResults);
@@ -34,10 +29,5 @@ export const processMovies = ({
 };
 
 export const processMovieDetails = (response: MovieDetailsResponse): MovieDetailedInfo => {
-    if (response.Response === 'False') {
-        throw new Error('Failed to process movie details');
-        // return null; // TODO: how to handle it?
-    }
-
     return mapResponseToMovieDetailedInfo(response);
 };
