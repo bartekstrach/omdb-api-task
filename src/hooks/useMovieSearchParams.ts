@@ -14,7 +14,9 @@ export const useMovieSearchParams = () => {
 
     const getParams = (): MovieSearchParams => {
         const q = searchParams.get('q') ?? '';
-        const page = parseInt(searchParams.get('page') ?? '1');
+        const pageParam = searchParams.get('page') ?? '1';
+        const parsedPage = parseInt(pageParam, 10);
+        const page = isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage;
         const type = searchParams.get('type') || undefined;
         const year = searchParams.get('y') ?? '';
 
