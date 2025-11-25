@@ -43,6 +43,39 @@
 ### Accessibility
 - React Axe
 
+## ➡️ Next steps - self-review
+
+### App
+- enable forgotten `StrictMode` 🤦
+- revisit `useEffect` (see if could be simplified/combined, especially "on mount" part)
+- revisit `useActionState` (check if used properly)
+- sanitize all inputs
+- validate all query params (and make sure it's done in one place)
+- revisit error handling (fallback components, logging?)
+
+### Components & Responsiveness
+- scale image (esp. on mobile devices)
+- resize and center `<Message>` component
+- create a fancy pagination component (add at least choosing a page number functionality)
+- add error messages for search inputs (title, year, type)
+- fix search inputs widths
+- revisit styles to simplify Tailwind usage
+
+### Indexed DB
+- handle potential race conditions (what if two movies are added at the same time)
+- create a util to query Indexed DB instead of fetching all records and filtering
+- use the query util created above for pagination in favorites
+- sync Indexed DB and React state (what if Indexed DB is unavailable or full?)
+
+### Testing
+- add more tests (test functions and components)
+- add `axe-core` with React Testing Library to test a11y
+- resolve issue with `react-axe` and Tailwind (incorrect converting colors)
+- add type mocks
+
+### Codebase
+- move and create abstraction for `src/utils/favorites.ts`
+
 ## ℹ️ More info
 
 More details [here](./docs/README.md).
