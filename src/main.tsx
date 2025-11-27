@@ -1,6 +1,4 @@
-// Disabling StrictMode to avoid calling fetch twice
-// import { StrictMode } from 'react';
-import React from 'react';
+import React, { StrictMode } from 'react';
 
 import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
@@ -18,7 +16,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 createRoot(document.getElementById('root')!).render(
-    // <StrictMode>
+    <StrictMode>
     <ErrorBoundary>
         <FavoritesProvider>
             <BrowserRouter>
@@ -26,5 +24,5 @@ createRoot(document.getElementById('root')!).render(
             </BrowserRouter>
         </FavoritesProvider>
     </ErrorBoundary>
-    // </StrictMode>
+    </StrictMode>
 );
