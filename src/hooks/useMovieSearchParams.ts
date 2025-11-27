@@ -2,7 +2,13 @@ import { useCallback, useMemo } from 'react';
 
 import { useSearchParams } from 'react-router';
 
-import { isMovieType, MovieType } from '../types';
+import { MovieType } from '../types';
+import {
+    getQueryParam,
+    getPageParam,
+    getTypeParam,
+    getYearParam,
+} from '../utils/movie-search-params';
 
 type MovieSearchParams = {
     q: string;
@@ -14,26 +20,15 @@ type MovieSearchParams = {
 export const useMovieSearchParams = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const params = useMemo<MovieSearchParams>(() => {
-        const q = searchParams.get('q') ?? '';
-
-        const pageParam = searchParams.get('page') ?? '1';
-        const parsedPage = parseInt(pageParam, 10);
-        const page = isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage;
-
-        const typeParam = searchParams.get('type');
-        const type = typeParam && isMovieType(typeParam) ? typeParam : undefined;
-
-        const year = searchParams.get('y') ?? '';
-        // TODO: validate year
-
-        return {
-            q,
-            page,
-            type,
-            year,
-        };
-    }, [searchParams]);
+    const params = useMemo<MovieSearchParams>(
+        () => ({
+            q: getQueryParam(searchParams),
+            page: getPageParam(searchParams),
+            type: getTypeParam(searchParams),
+            year: getYearParam(searchParams),
+        }),
+        [searchParams]
+    );
 
     const updateParams = useCallback(
         ({
