@@ -1,4 +1,4 @@
-import { useActionState, useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useParams } from 'react-router';
 
@@ -15,44 +15,49 @@ export const MovieDetailsPage = () => {
     const { addToFavorites, isFavorite, removeFromFavorites } = useFavorites();
 
     const [isFav, setIsFav] = useState(false);
-    const [isTransitioning, startTransition] = useTransition();
-
-    const [movieDetails, fetchMovieDetails, isFetching] = useActionState<
-        { data?: MovieDetailedInfo; error?: string },
-        string
-    >(async (_prev, movieId) => {
-        try {
-            const data = await omdbService.getMovieDetails({
-                i: movieId,
-                plot: 'full',
-            });
-            return { data };
-        } catch (error) {
-            const message = error instanceof Error ? error.message : 'An unexpected error occurred';
-            return { error: message };
-        }
-    }, {});
-
-    const isLoading = isFetching || isTransitioning;
+    const [movieDetails, setMovieDetails] = useState<{
+        data?: MovieDetailedInfo;
+        error?: string;
+        isLoading: boolean;
+    }>({ isLoading: false });
 
     useEffect(() => {
-        const loadData = async () => {
-            if (!id) return;
+        let cancelled = false;
 
-            fetchMovieDetails(id);
+        const loadData = async () => {
+            if (!id) {
+                return;
+            }
+
+            setMovieDetails({ isLoading: true });
 
             try {
-                const favoriteStatus = await isFavorite(id);
-                setIsFav(favoriteStatus);
+                const [data, favoriteStatus] = await Promise.all([
+                    omdbService.getMovieDetails({ i: id, plot: 'full' }),
+                    isFavorite(id),
+                ]);
+
+                if (!cancelled) {
+                    setMovieDetails({ data, isLoading: false });
+                    setIsFav(favoriteStatus);
+                }
             } catch (error) {
-                console.error('Failed to check favorite status:', error);
+                if (!cancelled) {
+                    const message =
+                        error instanceof Error
+                            ? error.message
+                            : 'An unexpected error occurred during fetching movie details';
+                    setMovieDetails({ error: message, isLoading: false });
+                }
             }
         };
 
-        startTransition(() => {
-            loadData();
-        });
-    }, [id]);
+        loadData();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [id, isFavorite]);
 
     const handleFavorite = async () => {
         if (!id || !movieDetails.data) {
@@ -71,7 +76,7 @@ export const MovieDetailsPage = () => {
         }
     };
 
-    if (isLoading) {
+    if (movieDetails.isLoading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <LoadingSpinner />
