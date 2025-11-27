@@ -47,7 +47,7 @@
 
 ### App
 - enable forgotten `StrictMode` 🤦
-- configure Vite development mode propertly
+- configure Vite development mode properly
 - revisit `useEffect` (see if could be simplified/combined, especially "on mount" part)
 - revisit `useActionState` (check if used properly)
 - sanitize all inputs
