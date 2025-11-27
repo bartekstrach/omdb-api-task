@@ -8,6 +8,11 @@ import {
     getPageParam,
     getTypeParam,
     getYearParam,
+    updateQueryParam,
+    QUERY_PARAM_KEY,
+    PAGE_PARAM_KEY,
+    TYPE_PARAM_KEY,
+    YEAR_PARAM_KEY,
 } from '../utils/movie-search-params';
 
 type MovieSearchParams = {
@@ -44,33 +49,10 @@ export const useMovieSearchParams = () => {
         }) => {
             const urlSearchParams = new URLSearchParams(searchParams);
 
-            if (q !== undefined) {
-                if (q.trim()) {
-                    urlSearchParams.set('q', q.trim());
-                } else {
-                    urlSearchParams.delete('q');
-                }
-            }
-
-            if (page !== undefined) {
-                urlSearchParams.set('page', page.toString());
-            }
-
-            if (type !== undefined) {
-                if (type) {
-                    urlSearchParams.set('type', type);
-                } else {
-                    urlSearchParams.delete('type');
-                }
-            }
-
-            if (year !== undefined) {
-                if (year) {
-                    urlSearchParams.set('y', year);
-                } else {
-                    urlSearchParams.delete('y');
-                }
-            }
+            updateQueryParam(urlSearchParams, QUERY_PARAM_KEY, q);
+            updateQueryParam(urlSearchParams, PAGE_PARAM_KEY, page);
+            updateQueryParam(urlSearchParams, TYPE_PARAM_KEY, type);
+            updateQueryParam(urlSearchParams, YEAR_PARAM_KEY, year);
 
             setSearchParams(urlSearchParams);
         },

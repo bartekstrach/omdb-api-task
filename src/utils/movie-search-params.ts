@@ -2,6 +2,21 @@ import { isMovieType, MovieType } from '../types';
 
 type ParamType = string | number | undefined;
 
+export const updateQueryParam = <T extends ParamType>(
+    urlSearchParams: URLSearchParams,
+    key: string,
+    value: T | undefined,
+    transformer: (value: T | undefined) => string | null = v => v?.toString()?.trim() ?? null
+): void => {
+    const transformedValue = transformer(value);
+
+    if (transformedValue !== null) {
+        urlSearchParams.set(key, transformedValue);
+    } else {
+        urlSearchParams.delete(key);
+    }
+};
+
 const getParam = <T extends ParamType>({
     searchParams,
     key,
@@ -14,14 +29,16 @@ const getParam = <T extends ParamType>({
     transform: (value: string) => T;
 }): T => {
     const param = searchParams.get(key);
+
     if (param === null) {
         return defaultValue;
     }
+
     return transform(param);
 };
 
 const DEFAULT_QUERY = '';
-const QUERY_PARAM_KEY = 'q';
+export const QUERY_PARAM_KEY = 'q';
 export const getQueryParam = (searchParams: URLSearchParams): string =>
     getParam({
         searchParams,
@@ -31,7 +48,7 @@ export const getQueryParam = (searchParams: URLSearchParams): string =>
     });
 
 const DEFAULT_PAGE = 1;
-const PAGE_PARAM_KEY = 'page';
+export const PAGE_PARAM_KEY = 'page';
 export const getPageParam = (searchParams: URLSearchParams): number =>
     getParam({
         searchParams,
@@ -49,7 +66,7 @@ export const getPageParam = (searchParams: URLSearchParams): number =>
     });
 
 const DEFAULT_TYPE = undefined;
-const TYPE_PARAM_KEY = 'type';
+export const TYPE_PARAM_KEY = 'type';
 export const getTypeParam = (searchParams: URLSearchParams): MovieType | undefined =>
     getParam({
         searchParams,
@@ -59,7 +76,7 @@ export const getTypeParam = (searchParams: URLSearchParams): MovieType | undefin
     });
 
 const DEFAULT_YEAR = '';
-const YEAR_PARAM_KEY = 'y';
+export const YEAR_PARAM_KEY = 'y';
 export const getYearParam = (searchParams: URLSearchParams): string =>
     getParam({
         searchParams,
