@@ -1,6 +1,8 @@
+import { useCallback, useMemo } from 'react';
+
 import { useSearchParams } from 'react-router';
 
-import { MovieType } from '../types';
+import { isMovieType, MovieType } from '../types';
 
 type MovieSearchParams = {
     q: string;
@@ -12,68 +14,76 @@ type MovieSearchParams = {
 export const useMovieSearchParams = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const getParams = (): MovieSearchParams => {
+    const params = useMemo<MovieSearchParams>(() => {
         const q = searchParams.get('q') ?? '';
+
         const pageParam = searchParams.get('page') ?? '1';
         const parsedPage = parseInt(pageParam, 10);
         const page = isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage;
-        const type = searchParams.get('type') || undefined;
+
+        const typeParam = searchParams.get('type');
+        const type = typeParam && isMovieType(typeParam) ? typeParam : undefined;
+
         const year = searchParams.get('y') ?? '';
+        // TODO: validate year
 
         return {
             q,
             page,
-            type: type as MovieType | undefined,
+            type,
             year,
         };
-    };
+    }, [searchParams]);
 
-    const updateParams = ({
-        q,
-        page,
-        type,
-        year,
-    }: {
-        q?: string;
-        page?: number;
-        type?: MovieType | undefined;
-        year?: string;
-    }) => {
-        const urlSearchParams = new URLSearchParams(searchParams);
+    const updateParams = useCallback(
+        ({
+            q,
+            page,
+            type,
+            year,
+        }: {
+            q?: string;
+            page?: number;
+            type?: MovieType | undefined;
+            year?: string;
+        }) => {
+            const urlSearchParams = new URLSearchParams(searchParams);
 
-        if (q !== undefined) {
-            if (q.trim()) {
-                urlSearchParams.set('q', q.trim());
-            } else {
-                urlSearchParams.delete('q');
+            if (q !== undefined) {
+                if (q.trim()) {
+                    urlSearchParams.set('q', q.trim());
+                } else {
+                    urlSearchParams.delete('q');
+                }
             }
-        }
 
-        if (page !== undefined) {
-            urlSearchParams.set('page', page.toString());
-        }
-
-        if (type !== undefined) {
-            if (type) {
-                urlSearchParams.set('type', type);
-            } else {
-                urlSearchParams.delete('type');
+            if (page !== undefined) {
+                urlSearchParams.set('page', page.toString());
             }
-        }
 
-        if (year !== undefined) {
-            if (year) {
-                urlSearchParams.set('y', year);
-            } else {
-                urlSearchParams.delete('y');
+            if (type !== undefined) {
+                if (type) {
+                    urlSearchParams.set('type', type);
+                } else {
+                    urlSearchParams.delete('type');
+                }
             }
-        }
 
-        setSearchParams(urlSearchParams);
-    };
+            if (year !== undefined) {
+                if (year) {
+                    urlSearchParams.set('y', year);
+                } else {
+                    urlSearchParams.delete('y');
+                }
+            }
+
+            setSearchParams(urlSearchParams);
+        },
+        [searchParams, setSearchParams]
+    );
 
     return {
-        params: getParams(),
+        params,
         updateParams,
     };
 };

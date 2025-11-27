@@ -1,4 +1,5 @@
 import { MovieType } from '../../types';
+import { capitalizeWord } from '../../utils/string';
 
 interface TypeDropdownProps {
     value: MovieType | undefined;
@@ -6,13 +7,15 @@ interface TypeDropdownProps {
     label?: string;
 }
 
+const DEFAULT_OPTION = 'all';
+
 export const TypeDropdown = ({ value, onChange, label = 'Type' }: TypeDropdownProps) => {
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
 
-        if (selectedValue === 'all') {
+        if (selectedValue === DEFAULT_OPTION) {
             onChange(undefined);
-        } else if (['movie', 'series', 'episode'].includes(selectedValue)) {
+        } else if (Object.values(MovieType).includes(selectedValue as MovieType)) {
             onChange(selectedValue as MovieType);
         }
     };
@@ -24,14 +27,16 @@ export const TypeDropdown = ({ value, onChange, label = 'Type' }: TypeDropdownPr
             </label>
             <select
                 id="type"
-                value={value || 'all'}
+                value={value || DEFAULT_OPTION}
                 onChange={handleChange}
                 className="border border-gray-700 px-4 py-2"
             >
-                <option value="all">All</option>
-                <option value="movie">Movie</option>
-                <option value="series">Series</option>
-                <option value="episode">Episode</option>
+                <option value={DEFAULT_OPTION}>{capitalizeWord(DEFAULT_OPTION)}</option>
+                {Object.values(MovieType).map(type => (
+                    <option key={type} value={type}>
+                        {capitalizeWord(type)}
+                    </option>
+                ))}
             </select>
         </div>
     );

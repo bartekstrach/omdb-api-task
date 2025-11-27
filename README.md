@@ -47,9 +47,12 @@
 
 ### App
 - enable forgotten `StrictMode` 🤦
+- configure Vite development mode properly
 - revisit `useEffect` (see if could be simplified/combined, especially "on mount" part)
 - revisit `useActionState` (check if used properly)
 - sanitize all inputs
+    - this is unnecessary, React does it internally - everything is converted to a string before being rendered - more [here](https://legacy.reactjs.org/docs/introducing-jsx.html#jsx-prevents-injection-attacks)
+    - required when using `dangerouslySetInnerHTML` property - more [here](https://react.dev/reference/react-dom/components/common#dangerously-setting-the-inner-html)
 - validate all query params (and make sure it's done in one place)
 - revisit error handling (fallback components, logging?)
 

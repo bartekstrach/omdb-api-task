@@ -1,4 +1,8 @@
-export type MovieType = 'movie' | 'series' | 'episode';
+export enum MovieType {
+    Episode = 'episode',
+    Movie = 'movie',
+    Series = 'series',
+}
 
 export type MovieDetailedInfo = {
     id: string;
