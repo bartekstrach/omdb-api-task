@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import { useSearchParams } from 'react-router';
 
-import { MovieType } from '../types';
+import { isMovieType, MovieType } from '../types';
 
 type MovieSearchParams = {
     q: string;
@@ -22,8 +22,7 @@ export const useMovieSearchParams = () => {
         const page = isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage;
 
         const typeParam = searchParams.get('type');
-        const type = typeParam ? (typeParam as MovieType) : undefined;
-        // TODO: validate type
+        const type = typeParam && isMovieType(typeParam) ? typeParam : undefined;
 
         const year = searchParams.get('y') ?? '';
         // TODO: validate year
