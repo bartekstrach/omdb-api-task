@@ -6,6 +6,7 @@ interface ViteTypeOptions {
 
 interface ImportMetaEnv {
     readonly VITE_OMDB_API_KEY: string;
+    readonly DEV: boolean;
 }
 
 interface ImportMeta {

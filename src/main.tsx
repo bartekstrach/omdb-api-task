@@ -9,7 +9,8 @@ import { ErrorBoundary } from './components';
 import { FavoritesProvider } from './contexts/favorites';
 import AppRoutes from './pages/routes.tsx';
 
-if (process.env.NODE_ENV === 'development') {
+// Ref: https://vite.dev/guide/env-and-mode#node-env-and-modes
+if (import.meta.env.DEV) {
     import('react-axe').then(axe => {
         axe.default(React, ReactDOM, 1000);
     });
