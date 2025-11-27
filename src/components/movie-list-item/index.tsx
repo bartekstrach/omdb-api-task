@@ -20,13 +20,26 @@ export const MovieListItem = ({ movieInfo }: Props) => {
     const { addToFavorites, isFavorite, removeFromFavorites } = useFavorites();
 
     useEffect(() => {
+        let cancelled = false;
+
         const fetchFavoriteStatus = async () => {
-            const favoriteStatus = await isFavorite(id);
-            setIsFav(favoriteStatus);
+            try {
+                const favoriteStatus = await isFavorite(id);
+
+                if (!cancelled) {
+                    setIsFav(favoriteStatus);
+                }
+            } catch (error) {
+                console.error('Failed to check favorite status:', error);
+            }
         };
 
         fetchFavoriteStatus();
-    }, [id]);
+
+        return () => {
+            cancelled = true;
+        };
+    }, [id, isFavorite]);
 
     const handleFavorite = async () => {
         try {
@@ -38,7 +51,7 @@ export const MovieListItem = ({ movieInfo }: Props) => {
                 setIsFav(true);
             }
         } catch (error) {
-            console.error('Failed to update favorites:', error);
+            console.error('Failed to update favorite status:', error);
         }
     };
 
