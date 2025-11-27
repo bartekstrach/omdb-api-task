@@ -103,33 +103,43 @@ export const MovieDetailsPage = () => {
         );
     }
 
+    const {
+        actors,
+        director,
+        genre,
+        plot,
+        poster,
+        rating,
+        runtime,
+        title,
+        type,
+        votes,
+        writer,
+        year,
+    } = movieDetails.data;
+
     return (
         <div className="flex flex-col md:flex-row">
-            <MoviePoster
-                alt={`${movieDetails.data.title} poster`}
-                height={450}
-                src={movieDetails.data.poster}
-                width={300}
-            />
+            <MoviePoster alt={`${title} poster`} height={450} src={poster} width={300} />
 
             <div className="flex flex-col flex-1">
                 <MovieDetailsHeader
                     isFavorite={isFav}
                     onToggleFavorite={handleFavorite}
-                    rating={movieDetails.data.rating}
-                    runtime={movieDetails.data.runtime}
-                    title={movieDetails.data.title}
-                    type={movieDetails.data.type}
-                    votes={movieDetails.data.votes}
-                    year={movieDetails.data.year}
+                    rating={rating}
+                    runtime={runtime}
+                    title={title}
+                    type={type}
+                    votes={votes}
+                    year={year}
                 />
 
                 <MovieDetailsContent
-                    actors={movieDetails.data.actors}
-                    director={movieDetails.data.director}
-                    genre={movieDetails.data.genre}
-                    plot={movieDetails.data.plot}
-                    writer={movieDetails.data.writer}
+                    actors={actors}
+                    director={director}
+                    genre={genre}
+                    plot={plot}
+                    writer={writer}
                 />
             </div>
         </div>
