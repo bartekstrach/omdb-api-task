@@ -45,6 +45,8 @@
 
 ## ➡️ Next steps - self-review
 
+Fixes are getting applied on [#new-main](https://github.com/bartekstrach/omdb-api-task/tree/new-main) branch.
+
 ### App
 - enable forgotten `StrictMode` 🤦
 - revisit `useEffect` (see if could be simplified/combined, especially "on mount" part)
