@@ -2,7 +2,18 @@ import { useCallback, useMemo } from 'react';
 
 import { useSearchParams } from 'react-router';
 
-import { isMovieType, MovieType } from '../types';
+import { MovieType } from '../types';
+import {
+    getQueryParam,
+    getPageParam,
+    getTypeParam,
+    getYearParam,
+    updateQueryParam,
+    QUERY_PARAM_KEY,
+    PAGE_PARAM_KEY,
+    TYPE_PARAM_KEY,
+    YEAR_PARAM_KEY,
+} from '../utils/movie-search-params';
 
 type MovieSearchParams = {
     q: string;
@@ -14,26 +25,15 @@ type MovieSearchParams = {
 export const useMovieSearchParams = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const params = useMemo<MovieSearchParams>(() => {
-        const q = searchParams.get('q') ?? '';
-
-        const pageParam = searchParams.get('page') ?? '1';
-        const parsedPage = parseInt(pageParam, 10);
-        const page = isNaN(parsedPage) || parsedPage < 1 ? 1 : parsedPage;
-
-        const typeParam = searchParams.get('type');
-        const type = typeParam && isMovieType(typeParam) ? typeParam : undefined;
-
-        const year = searchParams.get('y') ?? '';
-        // TODO: validate year
-
-        return {
-            q,
-            page,
-            type,
-            year,
-        };
-    }, [searchParams]);
+    const params = useMemo<MovieSearchParams>(
+        () => ({
+            q: getQueryParam(searchParams),
+            page: getPageParam(searchParams),
+            type: getTypeParam(searchParams),
+            year: getYearParam(searchParams),
+        }),
+        [searchParams]
+    );
 
     const updateParams = useCallback(
         ({
@@ -49,33 +49,10 @@ export const useMovieSearchParams = () => {
         }) => {
             const urlSearchParams = new URLSearchParams(searchParams);
 
-            if (q !== undefined) {
-                if (q.trim()) {
-                    urlSearchParams.set('q', q.trim());
-                } else {
-                    urlSearchParams.delete('q');
-                }
-            }
-
-            if (page !== undefined) {
-                urlSearchParams.set('page', page.toString());
-            }
-
-            if (type !== undefined) {
-                if (type) {
-                    urlSearchParams.set('type', type);
-                } else {
-                    urlSearchParams.delete('type');
-                }
-            }
-
-            if (year !== undefined) {
-                if (year) {
-                    urlSearchParams.set('y', year);
-                } else {
-                    urlSearchParams.delete('y');
-                }
-            }
+            updateQueryParam(urlSearchParams, QUERY_PARAM_KEY, q);
+            updateQueryParam(urlSearchParams, PAGE_PARAM_KEY, page);
+            updateQueryParam(urlSearchParams, TYPE_PARAM_KEY, type);
+            updateQueryParam(urlSearchParams, YEAR_PARAM_KEY, year);
 
             setSearchParams(urlSearchParams);
         },

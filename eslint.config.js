@@ -10,7 +10,7 @@ import tseslint from 'typescript-eslint';
 export default [
     // Global ignores
     {
-        ignores: ['dist'],
+        ignores: ['coverage', 'dist', 'node_modules'],
     },
     // Base configs
     js.configs.recommended,
