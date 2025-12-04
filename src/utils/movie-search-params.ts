@@ -82,5 +82,5 @@ export const getYearParam = (searchParams: URLSearchParams): string =>
         searchParams,
         key: YEAR_PARAM_KEY,
         defaultValue: DEFAULT_YEAR,
-        transform: val => /^\d{4}$/.test(val) ? val : DEFAULT_YEAR,
+        transform: val => (/^\d{4}$/.test(val) ? val : DEFAULT_YEAR),
     });
