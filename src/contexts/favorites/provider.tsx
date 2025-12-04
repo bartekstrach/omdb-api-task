@@ -64,7 +64,9 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
         }
     };
 
-    const getPaginatedFavorites = async (params: PaginationParams): Promise<PaginatedResult<MovieShortInfo>> => {
+    const getPaginatedFavorites = async (
+        params: PaginationParams
+    ): Promise<PaginatedResult<MovieShortInfo>> => {
         try {
             return await utils.getPaginatedFavorites(params);
         } catch (error) {
@@ -75,7 +77,15 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
 
     return (
         <FavoritesContext.Provider
-            value={{ addToFavorites, error, favorites, getPaginatedFavorites, isFavorite, isLoading, removeFromFavorites }}
+            value={{
+                addToFavorites,
+                error,
+                favorites,
+                getPaginatedFavorites,
+                isFavorite,
+                isLoading,
+                removeFromFavorites,
+            }}
         >
             {children}
         </FavoritesContext.Provider>

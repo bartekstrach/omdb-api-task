@@ -10,7 +10,7 @@ const openDB = (): Promise<IDBDatabase> => {
 
         request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
             const db = (event.target as IDBRequest).result;
-            
+
             let store: IDBObjectStore;
 
             if (db.objectStoreNames.contains(FAVORITES_STORE_NAME)) {
@@ -151,10 +151,11 @@ export const getPaginatedFavorites = async (
             total,
             page: params.page,
             pageSize: params.pageSize,
-            totalPages: Math.ceil(total / params.pageSize)
+            totalPages: Math.ceil(total / params.pageSize),
         };
     } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to get paginated favorites';
+        const message =
+            error instanceof Error ? error.message : 'Failed to get paginated favorites';
         throw new Error(message);
     }
 };
@@ -165,25 +166,23 @@ const searchAndPaginate = async (
 ): Promise<{ data: MovieShortInfo[]; total: number }> => {
     const searchLower = params.searchTerm!.toLowerCase();
     const index = store.index('titleLower');
-    
+
     const range = IDBKeyRange.bound(searchLower, searchLower + '\uffff');
-    
+
     const allMatches = await new Promise<MovieShortInfo[]>((resolve, reject) => {
         const request = index.getAll(range);
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
     });
 
-    const filtered = allMatches.filter(movie => 
-        movie.title.toLowerCase().includes(searchLower)
-    );
+    const filtered = allMatches.filter(movie => movie.title.toLowerCase().includes(searchLower));
 
     const startIndex = (params.page - 1) * params.pageSize;
     const paginated = filtered.slice(startIndex, startIndex + params.pageSize);
 
     return {
         data: paginated,
-        total: filtered.length
+        total: filtered.length,
     };
 };
 
@@ -201,7 +200,7 @@ const getCursorPaginated = (
         const index = store.index('addedAt');
         const request = index.openCursor(null, 'prev');
 
-        request.onsuccess = (event) => {
+        request.onsuccess = event => {
             const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
 
             if (!cursor || collected >= pageSize) {
@@ -220,7 +219,7 @@ const getCursorPaginated = (
             cursor.continue();
         };
 
-        request.onerror = (event) => {
+        request.onerror = event => {
             reject((event.target as IDBRequest).error);
         };
     });

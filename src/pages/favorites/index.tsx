@@ -69,8 +69,7 @@ export const FavoritesPage = () => {
 
                 {totalRecords > 0 && (
                     <span className="truncate text-sm md:text-base">
-                        Found {totalRecords}{' '}
-                        {totalRecords === 1 ? 'record' : 'records'}
+                        Found {totalRecords} {totalRecords === 1 ? 'record' : 'records'}
                     </span>
                 )}
             </div>
