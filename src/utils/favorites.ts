@@ -1,22 +1,8 @@
-import { MovieShortInfo } from '../types';
+import { MovieShortInfo, PaginatedResult, PaginationParams } from '../types';
 
 const FAVORITES_DB_NAME = 'omdb-db';
 const FAVORITES_STORE_NAME = 'favorites';
 const DB_VERSION = 2;
-
-interface PaginationParams {
-    page: number;
-    pageSize: number;
-    searchTerm?: string;
-}
-
-interface PaginatedResult<T> {
-    data: T[];
-    total: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-}
 
 const openDB = (): Promise<IDBDatabase> => {
     return new Promise((resolve, reject) => {
