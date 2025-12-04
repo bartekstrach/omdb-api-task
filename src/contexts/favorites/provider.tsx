@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { FavoritesContext } from './context';
-import { MovieShortInfo } from '../../types';
+import { MovieShortInfo, PaginationParams, PaginatedResult } from '../../types';
 import * as utils from '../../utils/favorites';
 
 interface FavoritesProviderProps {
@@ -64,9 +64,18 @@ export const FavoritesProvider = ({ children }: FavoritesProviderProps) => {
         }
     };
 
+    const getPaginatedFavorites = async (params: PaginationParams): Promise<PaginatedResult<MovieShortInfo>> => {
+        try {
+            return await utils.getPaginatedFavorites(params);
+        } catch (error) {
+            setError((error as Error).message);
+            throw error;
+        }
+    };
+
     return (
         <FavoritesContext.Provider
-            value={{ addToFavorites, error, favorites, isFavorite, isLoading, removeFromFavorites }}
+            value={{ addToFavorites, error, favorites, getPaginatedFavorites, isFavorite, isLoading, removeFromFavorites }}
         >
             {children}
         </FavoritesContext.Provider>

@@ -1,34 +1,51 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { MovieList, Pagination, TitleInput } from '../../components';
 import { useFavorites } from '../../hooks';
+import { MovieShortInfo } from '../../types';
 
 const MAX_ITEMS_PER_PAGE = 10;
 
 export const FavoritesPage = () => {
     const [searchBox, setSearchBox] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const { error, favorites, isLoading } = useFavorites();
 
-    const filteredFavorites = useMemo(
-        () =>
-            favorites.filter(movie => movie.title.toLowerCase().includes(searchBox.toLowerCase())),
-        [favorites, searchBox]
-    );
+    const [paginatedMovies, setPaginatedMovies] = useState<MovieShortInfo[]>([]);
+    const [totalRecords, setTotalRecords] = useState<number>(0);
+    const [totalPages, setTotalPages] = useState<number>(0);
 
-    const pages = useMemo(
-        () =>
-            filteredFavorites.length > 0
-                ? Math.ceil(filteredFavorites.length / MAX_ITEMS_PER_PAGE)
-                : 0,
-        [filteredFavorites]
-    );
+    const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
+    const [pageError, setPageError] = useState<string | undefined>(undefined);
 
-    const paginatedFavorites = useMemo(() => {
-        const startIndex = (currentPage - 1) * MAX_ITEMS_PER_PAGE;
-        const endIndex = startIndex + MAX_ITEMS_PER_PAGE;
-        return filteredFavorites.slice(startIndex, endIndex);
-    }, [filteredFavorites, currentPage]);
+    const { error: contextError, getPaginatedFavorites } = useFavorites();
+
+    const fetchPaginatedData = useCallback(async () => {
+        setIsLoadingPage(true);
+        setPageError(undefined);
+
+        try {
+            const result = await getPaginatedFavorites({
+                page: currentPage,
+                pageSize: MAX_ITEMS_PER_PAGE,
+                searchTerm: searchBox,
+            });
+
+            const { data, total, totalPages } = result;
+            setPaginatedMovies(data);
+            setTotalPages(totalPages);
+            setTotalRecords(total);
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Failed to load favorites';
+            setPageError(message);
+            console.error('Failed to fetch paginated favorites', error);
+        } finally {
+            setIsLoadingPage(false);
+        }
+    }, [currentPage, getPaginatedFavorites, searchBox]);
+
+    useEffect(() => {
+        fetchPaginatedData();
+    }, [fetchPaginatedData]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -39,6 +56,8 @@ export const FavoritesPage = () => {
         setCurrentPage(1);
     };
 
+    const displayError = contextError || pageError;
+
     return (
         <div className="flex flex-col space-y-4">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-y-2">
@@ -48,25 +67,25 @@ export const FavoritesPage = () => {
                     value={searchBox}
                 />
 
-                {filteredFavorites.length > 0 && (
+                {totalRecords > 0 && (
                     <span className="truncate text-sm md:text-base">
-                        Found {filteredFavorites.length}{' '}
-                        {filteredFavorites.length === 1 ? 'record' : 'records'}
+                        Found {totalRecords}{' '}
+                        {totalRecords === 1 ? 'record' : 'records'}
                     </span>
                 )}
             </div>
 
             <MovieList
-                error={error}
+                error={displayError}
                 hasSearched
-                isLoading={isLoading}
-                movies={paginatedFavorites}
+                isLoading={isLoadingPage}
+                movies={paginatedMovies}
             />
 
-            {filteredFavorites.length > 0 && pages > 1 && !isLoading && (
+            {totalRecords > 0 && totalPages > 1 && !isLoadingPage && (
                 <Pagination
                     currentPage={currentPage}
-                    totalPages={pages}
+                    totalPages={totalPages}
                     onPageChange={handlePageChange}
                 />
             )}
